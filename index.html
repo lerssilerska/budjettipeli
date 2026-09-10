@@ -38,6 +38,8 @@
   }
   .personarow { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border); }
   .persona { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--text-secondary); width: 56px; text-align: center; }
+  .persona-icon { font-size: 16px; line-height: 1; }
+  .persona-name { line-height: 1.2; }
   .persona-face {
     font-size: 18px; line-height: 1; display: inline-flex; align-items: center; justify-content: center;
     width: 34px; height: 34px; border-radius: 50%; margin-bottom: 2px;
@@ -637,7 +639,7 @@ function renderPersonas(){
     const changed = personaLastFace[p.name] !== undefined && personaLastFace[p.name] !== face;
     personaLastFace[p.name] = face;
     const bg = MOOD_COLORS[face] || "#eee";
-    return `<div class="persona" title="Reagoi: ${itemNames}"><span class="persona-face${changed ? ' bounce' : ''}" style="background:${bg}">${face}</span><span>${p.icon} ${p.name}</span></div>`;
+    return `<div class="persona" title="Reagoi: ${itemNames}"><span class="persona-face${changed ? ' bounce' : ''}" style="background:${bg}">${face}</span><span class="persona-icon">${p.icon}</span><span class="persona-name">${p.name}</span></div>`;
   }).join("");
 }
 
