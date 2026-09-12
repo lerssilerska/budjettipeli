@@ -1199,6 +1199,12 @@ async function handleChatSend(){
       })
     });
     const data = await response.json();
+
+    if (!response.ok || data.error){
+      const detail = data.message || data.error?.message || JSON.stringify(data).slice(0, 200);
+      throw new Error("HTTP " + response.status + ": " + detail);
+    }
+
     let raw = data.content.map(b => b.text || "").join("").trim();
     raw = raw.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(raw);
@@ -1219,7 +1225,7 @@ async function handleChatSend(){
     }
   } catch (err) {
     chatHistory.pop(); // peru juuri lisätty käyttäjäviesti, ettei historia jää epätahtiin
-    addChatMsg("Yhteys tekoälyyn epäonnistui tai vastausta ei voitu tulkita. Kokeile hetken päästä uudelleen tai muotoile toive toisin.", "error");
+    addChatMsg("Yhteys tekoälyyn epäonnistui: " + (err.message || String(err)), "error");
   } finally {
     btn.disabled = false;
   }
