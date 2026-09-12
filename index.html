@@ -3,39 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suomen valtion budjetti – leikkaa mitä haluat</title>
+<title>Pane Suomi kuntoon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f5f0; --card: #ffffff; --border: #e4e1d6;
-    --text: #22211d; --text-secondary: #6b685f; --text-muted: #9a978c;
-    --accent: #002f6c; --accent-bg: #e8f0fa; --danger: #a32d2d; --danger-bg: #faecec;
+    --bg: #eaf3ff; --card: rgba(255,255,255,0.9); --border: #d6e6f7;
+    --text: #33324a; --text-secondary: #7b7599; --text-muted: #a79fc4;
+    --accent: #0053a6; --accent-bg: #e8f1fb; --danger: #d1477a; --danger-bg: #fde8f0;
+    --mint: #3fae94; --mint-bg: #e3f7f1;
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    background: var(--bg); color: var(--text); padding: 0 0 40px;
+    margin: 0; font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #eaf3ff 0%, #ffffff 55%, #f3f8fc 100%);
+    background-attachment: fixed;
+    color: var(--text); padding: 0 0 48px;
+    -webkit-font-smoothing: antialiased;
   }
-  .hero {
-    background: linear-gradient(135deg, #002f6c 0%, #0053a6 100%);
-    color: #fff; padding: 14px 20px 16px; text-align: center;
-  }
-  .hero h1 { font-size: 17px; font-weight: 700; margin: 0; }
-  .wrap { max-width: 640px; margin: 16px auto 0; padding: 0 16px; }
+  .hero { padding: 26px 20px 20px; text-align: center; }
+  .hero h1 { font-size: 24px; font-weight: 700; margin: 0; color: var(--accent); }
+  .herointro { font-size: 13px; color: var(--text-secondary); max-width: 380px; margin: 8px auto 0; line-height: 1.5; }
+  .wrap { max-width: 640px; margin: 8px auto 0; padding: 0 16px; }
 
   .summarybar {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px 16px; margin-bottom: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    background: var(--card); border: none; border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,53,128,0.12);
+    padding: 20px 24px; margin-bottom: 18px;
   }
-  .summaryrow { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); }
+  .summaryrow { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); font-weight: 600; }
   .summaryrow b { color: var(--text); font-size: 15px; }
   .summaryrow b.negative { color: var(--danger); }
-  .goalbarwrap { height: 8px; background: var(--bg); border-radius: 6px; overflow: hidden; margin: 8px 0 4px; }
-  .goalbar { height: 100%; width: 0%; background: linear-gradient(90deg, #002f6c, #4d8fd1); transition: width .3s; }
+  .goalbarwrap { height: 10px; background: var(--accent-bg); border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+  .goalbar { height: 100%; width: 0%; background: linear-gradient(90deg, #003580, #4d8fd1); border-radius: 999px; transition: width .3s; }
   .goaltext { font-size: 11px; color: var(--text-muted); }
   .partymatch {
     margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--border);
     font-size: 12px; font-weight: 600; color: var(--accent);
   }
+  .coverage { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .onboardhint {
+    text-align: center; font-size: 13px; font-weight: 700; color: var(--accent);
+    background: var(--accent-bg); border-radius: 999px; padding: 10px 18px; margin-bottom: 14px;
+    animation: hintpulse 1.4s ease-in-out infinite;
+  }
+  @keyframes hintpulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
   .personarow { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px; margin-top: 10px; padding-top: 8px; border-top: 0.5px solid var(--border); }
   .persona { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--text-secondary); width: 56px; text-align: center; }
   .persona-icon { font-size: 16px; line-height: 1; }
@@ -52,44 +64,106 @@
     100% { transform: scale(1); }
   }
 
-  .toolsrow { display: flex; gap: 8px; margin-bottom: 8px; }
+  .toolsrow { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; justify-content: center; }
   .toolsrow input {
-    flex: 1; padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border);
+    flex: 1; padding: 10px 16px; border-radius: 999px; border: none;
+    background: var(--card); box-shadow: 0 2px 10px rgba(0,53,128,0.10);
     font-size: 13px; font-family: inherit;
   }
   .toolsrow button {
-    padding: 9px 12px; border-radius: 9px; border: 1px solid var(--border); background: #fff;
-    font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--text); white-space: nowrap;
+    padding: 10px 16px; border-radius: 999px; border: 1px solid #cfe0f5; background: #fff;
+    font-size: 12.5px; font-weight: 700; cursor: pointer; color: var(--accent); white-space: nowrap;
+    font-family: inherit;
   }
-  .toolsrow button:hover { border-color: var(--text-secondary); }
-  .searchresults { margin-bottom: 10px; }
-  .searchresults .legend-row { background: var(--card); border: 1px solid var(--border); border-radius: 9px; margin-bottom: 6px; }
+  .toolsrow button:hover { background: var(--accent-bg); }
+  .toolsrow button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .donebtn {
+    background: linear-gradient(90deg, #003580, #4d8fd1) !important; color: #fff !important;
+    border: none !important; font-weight: 700;
+  }
 
-  .breadcrumb { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .backbtn {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 13px; font-weight: 700; color: #fff; background: var(--accent);
-    border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer;
+  .summarypage-overlay {
+    position: fixed; inset: 0; z-index: 998; background: rgba(20,20,20,0.55);
+    display: flex; align-items: flex-start; justify-content: center;
+    overflow-y: auto; padding: 30px 16px; animation: fadein 0.2s ease;
   }
-  .backbtn:hover { background: #003f8f; }
-  .breadcrumb-current { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .summarypage {
+    background: #fff; border-radius: 16px; max-width: 520px; width: 100%;
+    padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;
+  }
+  .summarypage-close {
+    position: absolute; top: 14px; right: 14px; background: none; border: none;
+    font-size: 20px; color: var(--text-muted); cursor: pointer;
+  }
+  .summarypage h2 { margin: 0 0 4px; font-size: 20px; }
+  .summarypage .sp-total { font-size: 32px; font-weight: 800; margin: 10px 0 4px; }
+  .summarypage .sp-total.negative { color: var(--danger); }
+  .summarypage .sp-gradebox {
+    display: flex; align-items: center; gap: 12px; background: var(--accent-bg);
+    border-radius: 12px; padding: 12px 16px; margin: 14px 0;
+  }
+  .summarypage .sp-gradeletter { font-size: 30px; font-weight: 900; color: var(--accent); }
+  .summarypage .sp-gradetext { font-size: 13px; color: var(--text-secondary); }
+  .summarypage .sp-section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-secondary); margin: 18px 0 8px; }
+  .summarypage .sp-party { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .summarypage .sp-partydesc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .summarypage .sp-changelist { max-height: 220px; overflow-y: auto; }
+  .cmp-totals { display: flex; gap: 10px; margin: 14px 0; }
+  .cmp-total { flex: 1; background: var(--accent-bg); border-radius: 14px; padding: 12px; text-align: center; }
+  .cmp-total-label { font-size: 11px; color: var(--text-secondary); font-weight: 700; }
+  .cmp-total-val { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .cmp-total-val.negative { color: var(--danger); }
+  .cmp-row { padding: 10px 4px; border-bottom: 0.5px solid var(--border); }
+  .cmp-row-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .cmp-row-vals { display: flex; gap: 14px; font-size: 12px; }
+  .cmp-val.mine { color: var(--accent); font-weight: 700; }
+  .cmp-val.theirs { color: var(--text-secondary); font-weight: 700; }
+  .sp-timeline { display: flex; flex-direction: column; gap: 10px; margin-bottom: 6px; }
+  .tl-row { display: flex; gap: 12px; align-items: flex-start; }
+  .tl-year {
+    flex: 0 0 62px; font-size: 12px; font-weight: 800; color: #fff; background: var(--accent);
+    border-radius: 999px; padding: 4px 0; text-align: center; height: fit-content;
+  }
+  .tl-body { flex: 1; }
+  .tl-amount { font-size: 13px; font-weight: 700; color: var(--accent); }
+  .tl-amount.negative { color: var(--danger); }
+  .tl-text { font-size: 12.5px; color: var(--text-secondary); line-height: 1.4; margin-top: 2px; }
+  .changesearch {
+    width: 100%; padding: 9px 14px; border-radius: 999px; border: 1px solid #cfe0f5;
+    background: #fff; font-size: 13px; font-family: inherit; margin: 8px 0 4px;
+  }
   .ministrydesc {
-    font-size: 12.5px; color: var(--text-secondary); background: #f2f0e8;
-    border-radius: 9px; padding: 8px 12px; margin-bottom: 12px; line-height: 1.5;
+    font-size: 12.5px; color: var(--text-secondary); background: var(--accent-bg);
+    border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; line-height: 1.5; text-align: left;
   }
-  .ministrydesc:empty { display: none; }
-  .breadcrumb a { color: var(--accent); cursor: pointer; text-decoration: none; font-weight: 600; }
+  .ministrydesc:empty { display: none; margin-bottom: 0; }
 
   .chartcard {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); text-align: center; margin-bottom: 14px;
+    background: var(--card); border: none; border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,53,128,0.12);
+    padding: 28px 24px; text-align: center; margin-bottom: 18px;
+    position: relative;
   }
+  .chart-backbtn {
+    display: none; position: absolute; top: 16px; right: 16px; z-index: 2;
+    padding: 10px 16px; border-radius: 999px; border: none;
+    background: linear-gradient(90deg, #003580, #4d8fd1); color: #fff;
+    font-size: 12.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 10px rgba(0,53,128,0.25);
+    align-items: center; justify-content: center; font-family: inherit; white-space: nowrap;
+  }
+  .chart-backbtn:hover { filter: brightness(1.05); }
+  .chart-backbtn.visible { display: flex; }
+  .chart-visual { text-align: center; }
+  .chart-legend { text-align: left; margin-top: 18px; }
   svg.piechart { width: 100%; max-width: 320px; height: auto; }
+  .chart-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .chart-title-share { display: block; font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+  .chart-title:empty { display: none; margin-bottom: 0; }
   .donut-total { font-size: 15px; font-weight: 800; fill: var(--text); }
   .donut-sub { font-size: 7px; fill: var(--text-secondary); }
-  .pieslice { cursor: pointer; stroke: #fff; stroke-width: 1.5; transition: opacity .15s; }
-  .pieslice:hover { opacity: 0.8; }
-  .pieslice.hovered { filter: brightness(1.25); stroke: #fff; stroke-width: 3; }
+  .pieslice { cursor: pointer; stroke: #fff; stroke-width: 1.5; transition: opacity .2s ease, filter .25s ease, stroke-width .25s ease, transform .2s ease; transform-box: fill-box; transform-origin: center; }
+  .pieslice:hover { opacity: 0.92; filter: brightness(1.1); transform: scale(1.02); }
+  .pieslice.hovered { filter: brightness(1.25); stroke: #fff; stroke-width: 3; transform: scale(1.03); }
   .pieslice.cut { filter: saturate(0.5) brightness(1.15); }
   .pieslice.flash { animation: sliceflash 0.9s ease-out; stroke: #fff; stroke-width: 4; }
   @keyframes sliceflash {
@@ -104,19 +178,25 @@
   }
   .legend-row:hover { background: var(--bg); }
   .legend-row.hovered { background: var(--accent-bg); }
-  .legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-  .legend-name { flex: 1; font-size: 13px; font-weight: 600; }
+  .legend-row.expanded {
+    background: var(--accent-bg); border-radius: 9px 9px 0 0;
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+  .legend-swatch { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; }
+  .legend-text { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .legend-name { font-size: 13px; font-weight: 600; }
   .legend-amount { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
   .legend-tag {
     font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
-    background: var(--danger-bg); color: var(--danger); margin-left: 6px;
+    background: #e6f4ea; color: #1a7a3a; margin-left: 6px;
   }
-  .legend-tag.increase { background: #e6f4ea; color: #1a7a3a; }
+  .legend-tag.increase { background: var(--danger-bg); color: var(--danger); }
   .legend-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; }
 
   .detailcard {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); margin-bottom: 14px;
+    background: var(--card); border: none; border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,53,128,0.12);
+    padding: 22px; margin-bottom: 18px;
     animation: detailin 0.25s ease;
   }
   @keyframes detailin {
@@ -130,35 +210,72 @@
   .detail-sub { font-size: 12px; color: var(--text-secondary); margin-bottom: 14px; }
   .detail-amount { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
   .detail-amount.negative { color: var(--danger); }
-  .presetrow { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
   .inlinepanel {
-    background: var(--accent-bg); border: 1px solid #b9d4ee; border-radius: 10px;
-    padding: 12px; margin: -2px 0 8px; animation: detailin 0.2s ease;
+    background: var(--accent-bg); border: 1px solid #d6e6f7; border-radius: 18px;
+    padding: 16px 18px; margin: -2px 0 8px; animation: detailin 0.2s ease;
   }
-  .inlinepanel .presetrow { margin-bottom: 10px; }
-  .inlinepanel-desc { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 10px; line-height: 1.4; }
-  .inlinepanel .sliderrow { border-top: 0.5px solid #b9d4ee; padding-top: 10px; }
-  .sliderlabels { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
-  .inlinepanel .presetbtn { background: #fff; }
-  .inlinepanel .presetbtn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .presetbtn.cutbtn { border-color: #a9d4b5; color: #1a7a3a; }
-  .presetbtn.cutbtn.active { background: #1a7a3a; border-color: #1a7a3a; color: #fff; }
-  .presetbtn.increasebtn { border-color: #e3b3b3; color: #a13d3d; }
-  .presetbtn.increasebtn.active { background: #a13d3d; border-color: #a13d3d; color: #fff; }
-  .presetbtn.neutral { color: var(--text-secondary); }
-  button.presetbtn {
-    flex: 1; min-width: 70px; font-size: 12.5px; font-weight: 600; padding: 9px 8px;
-    border-radius: 9px; border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--text);
+  .legend-row.expanded + .inlinepanel { border-top-left-radius: 0; border-top-right-radius: 0; margin-top: 0; }
+  .legend-row.locked { opacity: 0.65; cursor: default; }
+  .legend-row.locked:hover { background: none; }
+  .legend-tag.locked { background: #e8e6dc; color: var(--text-secondary); }
+  .undobtn {
+    background: none; border: 1px solid var(--border); border-radius: 999px; margin-left: 4px;
+    font-size: 12px; padding: 1px 8px; cursor: pointer; color: var(--text-secondary); line-height: 1.4;
   }
-  button.presetbtn:hover { border-color: var(--text-secondary); }
-  button.presetbtn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
-  .sliderrow { display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 0.5px solid var(--border); }
-  .sliderrow input[type="range"] { flex: 1; }
-  .sliderval { font-size: 12px; color: var(--text-secondary); min-width: 110px; text-align: right; }
+  .undobtn:hover { border-color: var(--accent); color: var(--accent); }
+  .pieslice.locked { cursor: default; }
+  .inlinepanel.locked { background: #f2f0e8; border-color: #d8d5c8; }
+  .lockednotice { font-size: 13px; color: var(--text-secondary); background: #e8e6dc; border-radius: 12px; padding: 10px 12px; }
+  .inlinepanel-desc { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4; }
+  .inlinepanel .sliderrow { padding-top: 4px; }
+  .sliderlabels {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 10.5px; color: var(--text-muted); margin-top: 6px;
+  }
+  .sliderlabels span:first-child { text-align: left; }
+  .sliderlabels span:nth-child(2) { text-align: center; }
+  .sliderlabels span:last-child { text-align: right; }
+  .sliderlabels-5 { grid-template-columns: repeat(5, 1fr); }
+  .sliderlabels-5 span { text-align: center; }
+  .sliderlabels-5 span:first-child { text-align: left; }
+  .sliderlabels-5 span:last-child { text-align: right; }
+  .sliderlabels-5 span:nth-child(3) { font-weight: 800; color: var(--text-secondary); }
+  .sliderreadout { text-align: center; margin-bottom: 12px; }
+  .sliderreadout-pct {
+    display: block; font-size: 32px; font-weight: 800; letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .sliderreadout-eur { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 2px; height: 16px; }
+  .sliderreadout.neutral .sliderreadout-pct { color: var(--text-muted); }
+  .sliderreadout.cut .sliderreadout-pct { color: var(--mint); }
+  .sliderreadout.increase .sliderreadout-pct { color: var(--danger); }
+  .resetlink {
+    display: block; margin: 10px auto 0; background: none; border: none; font-family: inherit;
+    font-size: 12px; font-weight: 700; color: var(--text-secondary); text-decoration: underline; cursor: pointer;
+  }
+  .resetlink:hover { color: var(--accent); }
+  .sliderrow { display: flex; align-items: center; gap: 10px; position: relative; }
+  .sliderzeromark {
+    position: absolute; left: 50%; top: 2px; bottom: 2px; width: 2px;
+    background: var(--text); opacity: 0.5; transform: translateX(-1px); pointer-events: none; z-index: 1;
+  }
+  .sliderrow input[type="range"] {
+    flex: 1; -webkit-appearance: none; appearance: none; height: 8px; border-radius: 999px;
+    background: linear-gradient(90deg, var(--mint) 0%, #e9ecef 48%, #e9ecef 52%, var(--danger) 100%);
+    position: relative; z-index: 2;
+  }
+  .sliderrow input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--accent); box-shadow: 0 2px 6px rgba(0,53,128,0.30); cursor: pointer;
+  }
+  .sliderrow input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: #fff; border: 3px solid var(--accent);
+    box-shadow: 0 2px 6px rgba(0,53,128,0.30); cursor: pointer;
+  }
 
   .chatcard {
-    background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-    padding: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.06); margin-bottom: 14px;
+    background: var(--card); border: none; border-radius: 24px;
+    box-shadow: 0 8px 24px rgba(0,53,128,0.12);
+    padding: 22px; margin-bottom: 18px;
   }
   .chattitle { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--accent); }
   .chatlog { max-height: 220px; overflow-y: auto; margin-bottom: 10px; }
@@ -173,8 +290,8 @@
     font-size: 13px; font-family: inherit;
   }
   .chatinputrow button {
-    padding: 10px 16px; border-radius: 9px; border: none; background: var(--accent);
-    color: #fff; font-weight: 600; font-size: 13px; cursor: pointer;
+    padding: 10px 18px; border-radius: 999px; border: none; background: linear-gradient(90deg, #003580, #4d8fd1);
+    color: #fff; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit;
   }
   .chatinputrow button:disabled { opacity: 0.5; cursor: not-allowed; }
   .chathint { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
@@ -248,7 +365,10 @@
 </head>
 <body>
 
-<div class="hero"><h1>Suomen valtion budjetti – leikkaa mitä haluat</h1></div>
+<div class="hero">
+  <h1>Pane Suomi kuntoon</h1>
+  <p class="herointro">Selaa Suomen oikeaa valtion budjettia, leikkaa tai lisää rahaa mihin haluat, ja katso mihin puolueeseen valintasi osuvat.</p>
+</div>
 
 <div class="wrap">
   <div class="summarybar">
@@ -259,24 +379,29 @@
     <div class="goalbarwrap"><div class="goalbar" id="sum-bar"></div></div>
     <div class="goaltext" id="sum-goaltext">0 % vuoden 2025 alijäämästä (12 200 milj. €)</div>
     <div class="partymatch" id="partymatch">Lähimpänä valintojasi: —</div>
+    <div class="coverage" id="coverage">0/14 ministeriötä käyty läpi</div>
     <div class="personarow" id="personarow"></div>
   </div>
 
   <div class="toolsrow">
-    <input type="text" id="searchbox" placeholder="🔍 Etsi menokohde nimellä...">
     <button id="showall-btn" type="button">Kaikki muutokset</button>
-    <button id="history-btn" type="button">Historia</button>
     <button id="share-btn" type="button">Jaa tuloksesi</button>
+    <button id="compare-btn" type="button">🔀 Vertaile leikkauksia</button>
+    <button id="done-btn" type="button" class="donebtn">✅ Valmis</button>
   </div>
-  <div class="searchresults" id="searchresults"></div>
 
-  <div class="breadcrumb" id="breadcrumb"></div>
-  <div class="ministrydesc" id="ministrydesc"></div>
-
+  <div class="onboardhint" id="onboardhint">👆 Klikkaa ministeriötä aloittaaksesi</div>
   <div class="chartcard">
-    <svg class="piechart" id="piechart" viewBox="0 0 200 200"></svg>
-    <div class="legend" id="legend"></div>
-    <div class="legend-note" id="legend-note"></div>
+    <button type="button" class="chart-backbtn" id="chart-backbtn" aria-label="Takaisin koko budjettiin">← Takaisin</button>
+    <div class="chart-visual">
+      <div class="chart-title" id="chart-title"></div>
+      <div class="ministrydesc" id="ministrydesc"></div>
+      <svg class="piechart" id="piechart" viewBox="0 0 200 200"></svg>
+    </div>
+    <div class="chart-legend">
+      <div class="legend" id="legend"></div>
+      <div class="legend-note" id="legend-note"></div>
+    </div>
   </div>
 
   <div id="detailslot"></div>
@@ -294,112 +419,126 @@
   <div class="resetrow"><button class="resetbtn" id="resetall">Nollaa kaikki muutokset</button></div>
 
   <footer>
-    Havainnollistava, ei virallinen työkalu. Pääluokkien kokonaissummat perustuvat vuoden 2026 talousarvioesitykseen;
-    yksittäisten menokohteiden jako niiden sisällä on osin karkea arvio, ei tarkka momenttikohtainen erittely.
+    Havainnollistava, ei virallinen työkalu. Luvut perustuvat vuoden 2025 talousarvioesitykseen (budjetti.vm.fi);
+    "arvio"-merkityt kohteet ovat karkeampia jakoja, koska tarkkaa momenttikohtaista erittelyä ei ollut saatavilla.
   </footer>
 </div>
 
 <script>
+// ✅ Chatti käyttää tätä Cloudflare Workeria (leotoopen oma, ilmainen Workers AI -välityspalvelin).
+const API_ENDPOINT = "https://pane-suomi-kuntoon.leotoope.workers.dev/";
+
 const SAVINGS_TARGET = 12200;
 // Väritys järjestyksessä suurimmasta pienimpään ministeriöön: VM, STM, OKM, PLM, TEM, LVM, MMM, SM, UM, OM, VNK, Eduskunta, Presidentti
-const PALETTE = ["#1B3358","#D46A93","#1E9E8E","#4B5D3A","#D9A441","#E08E45","#4C8C4A","#A13D3D","#7B5EA7","#8C3B5A","#5C7A96","#B08D2B","#6B4226"];
+const PALETTE = ["#0053A6","#F4A300","#2EC4B6","#E63946","#6A4C93","#43AA8B","#F3722C","#277DA1","#90BE6D","#F9C74F","#577590","#F94144","#4D908E","#8D5B4C"];
 
 const budget = [
   { id:"21", name:"Eduskunta", desc:"Suomen lainsäädäntövaltaa käyttävä kansanedustuslaitos ja sen kanslia.", items:[
-    { id:"21-1", name:"Kansanedustajien palkkiot ja kulut", desc:"Kansanedustajien palkat ja kulukorvaukset työn hoitamiseen.", amount:50 },
-    { id:"21-2", name:"Eduskunnan kanslian toimintamenot", desc:"Eduskunnan oman hallinnon ja virkamiesten toimintamenot.", amount:80 },
-    { id:"21-3", name:"Valtiontalouden tarkastusvirasto", desc:"Riippumaton virasto, joka valvoo valtion rahankäyttöä.", amount:15 },
-    { id:"21-4", name:"Muut eduskunnan menot", desc:"Muut eduskuntaan liittyvät pienemmät menoerät.", amount:35 }
+    { id:"21-1", name:"Kansanedustajien palkkiot ja kulut", desc:"Kansanedustajien palkat ja kulukorvaukset työn hoitamiseen.", amount:41, approx:true },
+    { id:"21-2", name:"Eduskunnan kanslian toimintamenot", desc:"Eduskunnan oman hallinnon ja virkamiesten toimintamenot.", amount:66, approx:true },
+    { id:"21-3", name:"Valtiontalouden tarkastusvirasto", desc:"Riippumaton virasto, joka valvoo valtion rahankäyttöä.", amount:12, approx:true },
+    { id:"21-4", name:"Muut eduskunnan menot", desc:"Muut eduskuntaan liittyvät pienemmät menoerät.", amount:29, approx:true }
   ]},
   { id:"22", name:"Tasavallan presidentti", desc:"Valtionpäämiehen kanslia ja edustustehtävät.", items:[
-    { id:"22-1", name:"Presidentin kanslian toimintamenot", desc:"Presidentin kanslian henkilöstö ja toimintamenot.", amount:13 },
-    { id:"22-2", name:"Presidentin arvo- ja edustusmenot", desc:"Presidentin virallisiin tehtäviin ja edustukseen liittyvät kulut.", amount:2 }
+    { id:"22-1", name:"Presidentin kanslian toimintamenot", desc:"Presidentin kanslian henkilöstö ja toimintamenot.", amount:40, approx:true },
+    { id:"22-2", name:"Presidentin arvo- ja edustusmenot", desc:"Presidentin virallisiin tehtäviin ja edustukseen liittyvät kulut.", amount:7, approx:true }
   ]},
-  { id:"23", name:"Valtioneuvoston kanslia", desc:"Pääministerin ja hallituksen työtä tukeva ministeriö, mm. valtion omistajaohjaus.", items:[
-    { id:"23-1", name:"VNK:n toimintamenot", desc:"Pääministerin ja hallituksen työtä tukevan kanslian toimintamenot.", amount:90 },
-    { id:"23-2", name:"Valtion omistajaohjaus", desc:"Valtion omistamien yhtiöiden omistajaohjaus ja seuranta.", amount:20 },
-    { id:"23-3", name:"Tiedonhallinta ja viestintä", desc:"Valtionhallinnon tietojärjestelmät ja viestintä.", amount:30 },
-    { id:"23-4", name:"Muut VNK:n menot", desc:"Muut valtioneuvoston kanslian menot.", amount:60 }
+  { id:"23", name:"Valtioneuvoston kanslia", desc:"Pääministerin ja hallituksen työtä tukeva ministeriö, mm. siviilikriisinhallinta ja valtion omistajaohjaus.", items:[
+    { id:"23-1", name:"VNK:n toimintamenot", desc:"Pääministerin ja hallituksen työtä tukevan kanslian toimintamenot.", amount:155 },
+    { id:"23-2", name:"Oikeuskanslerinvirasto", desc:"Valtioneuvoston ja viranomaisten toiminnan laillisuusvalvonta.", amount:4 },
+    { id:"23-3", name:"Siviilikriisinhallinta", desc:"Suomalaisasiantuntijoiden lähettäminen kriisialueiden siviilitehtäviin.", amount:18 },
+    { id:"23-4", name:"Rauhanvälitys ja CMI Rauhanrahasto", desc:"Suomen tuki kansainväliselle rauhanvälitystyölle.", amount:9 },
+    { id:"23-5", name:"Muut VNK:n menot", desc:"Muut valtioneuvoston kanslian menot, mm. EU-elpymisvälineen hallinnointi ja toimitilahankkeet.", amount:60, approx:true }
   ]},
   { id:"24", name:"Ulkoministeriö", desc:"Ulkopolitiikka, kehitysyhteistyö ja Suomen edustustot ulkomailla.", items:[
-    { id:"24-1", name:"Varsinainen kehitysyhteistyö", desc:"Suomen valtion suora tuki köyhempien maiden kehitykseen.", amount:457 },
-    { id:"24-2", name:"Humanitaarinen apu", desc:"Hätäapu kriisi- ja katastrofialueille.", amount:30 },
-    { id:"24-3", name:"Kansainvälisten järjestöjen jäsenmaksut", desc:"Suomen jäsenmaksut YK:lle ja muille kansainvälisille järjestöille.", amount:152 },
+    { id:"24-1", name:"Varsinainen kehitysyhteistyö", desc:"Suomen valtion suora tuki köyhempien maiden kehitykseen.", amount:534 },
+    { id:"24-2", name:"Humanitaarinen apu", desc:"Hätäapu kriisi- ja katastrofialueille.", amount:30, approx:true },
+    { id:"24-3", name:"Kansainvälisten järjestöjen jäsenmaksut", desc:"Suomen jäsenmaksut YK:lle ja muille kansainvälisille järjestöille.", amount:163 },
     { id:"24-4", name:"Sotilaallinen kriisinhallinta (UM-osuus)", desc:"Suomalaisten osallistuminen kansainvälisiin rauhanturvaoperaatioihin.", amount:53 },
-    { id:"24-5", name:"Siviilikriisinhallinta", desc:"Suomalaisasiantuntijoiden lähettäminen kriisialueiden siviilitehtäviin.", amount:18 },
-    { id:"24-6", name:"Ulkoasiainhallinto ja edustustot", desc:"Suomen suurlähetystöt ja ulkoasiainhallinnon toimintamenot.", amount:800 },
-    { id:"24-7", name:"Muu kehitysyhteistyö ja sitoumukset", desc:"Muut kehitysyhteistyöhön liittyvät sitoumukset ja rahastot.", amount:190 }
+    { id:"24-5", name:"Ulkoasiainhallinto ja edustustot", desc:"Suomen suurlähetystöt ja ulkoasiainhallinnon toimintamenot.", amount:250 },
+    { id:"24-6", name:"Muu kehitysyhteistyö ja sitoumukset", desc:"Muut kehitysyhteistyöhön liittyvät sitoumukset ja rahastot, esim. Ukraina-tuki ja Finnfund.", amount:170, approx:true }
   ]},
   { id:"25", name:"Oikeusministeriö", desc:"Tuomioistuimet, syyttäjät, vankeinhoito ja muu oikeuslaitos.", items:[
-    { id:"25-1", name:"Tuomioistuinlaitos", desc:"Käräjä-, hovi- ja hallinto-oikeuksien sekä korkeimpien oikeuksien toimintamenot.", amount:395 },
-    { id:"25-2", name:"Julkinen oikeusapu ja edunvalvonta", desc:"Ilmainen tai edullinen oikeusapu pienituloisille sekä talous- ja velkaneuvonta.", amount:110 },
-    { id:"25-3", name:"Syyttäjätoiminta", desc:"Syyttäjälaitoksen toiminta rikosasioiden ajamiseksi tuomioistuimessa.", amount:69 },
-    { id:"25-4", name:"Ulosottotoiminta", desc:"Maksamattomien velkojen ja saatavien perintä viranomaistoimin.", amount:119 },
-    { id:"25-5", name:"Rikosseuraamuslaitos (vankeinhoito)", desc:"Vankiloiden ja yhdyskuntaseuraamusten (esim. valvottu koevapaus) ylläpito.", amount:319 },
-    { id:"25-6", name:"Oikeusministeriön oma toiminta", desc:"Oikeusministeriön oma hallinto ja ohjaustoiminta.", amount:24 },
-    { id:"25-7", name:"Muut oikeushallinnon menot ja vaalit", desc:"Muu oikeushallinto sekä vaalien järjestämisen kustannukset.", amount:214 }
+    { id:"25-1", name:"Tuomioistuinlaitos", desc:"Käräjä-, hovi- ja hallinto-oikeuksien sekä korkeimpien oikeuksien toimintamenot.", amount:356 },
+    { id:"25-2", name:"Julkinen oikeusapu ja edunvalvonta", desc:"Ilmainen tai edullinen oikeusapu pienituloisille sekä talous- ja velkaneuvonta.", amount:88 },
+    { id:"25-3", name:"Syyttäjätoiminta", desc:"Syyttäjälaitoksen toiminta rikosasioiden ajamiseksi tuomioistuimessa.", amount:63 },
+    { id:"25-4", name:"Ulosottotoiminta", desc:"Maksamattomien velkojen ja saatavien perintä viranomaistoimin.", amount:107 },
+    { id:"25-5", name:"Rikosseuraamuslaitos (vankeinhoito)", desc:"Vankiloiden ja yhdyskuntaseuraamusten (esim. valvottu koevapaus) ylläpito.", amount:284 },
+    { id:"25-6", name:"Oikeusministeriön oma toiminta", desc:"Oikeusministeriön oma hallinto, oikeusrekisterikeskus ja erityisviranomaiset.", amount:51 },
+    { id:"25-7", name:"Muut oikeushallinnon menot ja vaalit", desc:"Muu oikeushallinto sekä vaalien järjestämisen kustannukset.", amount:251, approx:true }
   ]},
   { id:"26", name:"Sisäministeriö", desc:"Poliisi, rajavartiolaitos, pelastustoimi ja maahanmuuttoasiat.", items:[
-    { id:"26-1", name:"Poliisitoimi", desc:"Poliisin partiointi, rikostutkinta ja muu järjestyksenpito.", amount:950 },
-    { id:"26-2", name:"Rajavartiolaitos", desc:"Suomen rajojen valvonta ja meripelastus.", amount:350 },
-    { id:"26-3", name:"Pelastustoimi ja hätäkeskustoiminta", desc:"Palokunnat, pelastustoiminta ja hätäkeskuspäivystys.", amount:90 },
-    { id:"26-4", name:"Maahanmuuttajien vastaanotto ja kotouttaminen", desc:"Turvapaikanhakijoiden vastaanottopalvelut ja kotoutumiskoulutus.", amount:160 },
+    { id:"26-1", name:"Poliisitoimi", desc:"Poliisin partiointi, rikostutkinta ja muu järjestyksenpito.", amount:975 },
+    { id:"26-2", name:"Rajavartiolaitos", desc:"Suomen rajojen valvonta ja meripelastus.", amount:433 },
+    { id:"26-3", name:"Pelastustoimi ja hätäkeskustoiminta", desc:"Palokunnat, pelastustoiminta ja hätäkeskuspäivystys.", amount:102 },
+    { id:"26-4", name:"Maahanmuuttajien vastaanotto ja kotouttaminen", desc:"Turvapaikanhakijoiden vastaanottopalvelut ja kotoutumiskoulutus.", amount:325 },
     { id:"26-5", name:"Pakkopalautukset ja käännytykset", desc:"Kielteisen päätöksen saaneiden käännyttämisen ja maasta poistamisen kulut.", amount:4 },
-    { id:"26-6", name:"Suojelupoliisi", desc:"Kansallinen turvallisuustiedustelu ja vastavakoilu.", amount:60 },
-    { id:"26-7", name:"Sisäministeriön hallinto ja muut", desc:"Sisäministeriön oma hallinto ja muut pienemmät erät.", amount:586 }
+    { id:"26-6", name:"Suojelupoliisi", desc:"Kansallinen turvallisuustiedustelu ja vastavakoilu.", amount:65 },
+    { id:"26-7", name:"Sisäministeriön hallinto ja muut", desc:"Sisäministeriön oma hallinto ja muut pienemmät erät.", amount:303, approx:true }
   ]},
   { id:"27", name:"Puolustusministeriö", desc:"Puolustusvoimat, asehankinnat ja maanpuolustus.", items:[
-    { id:"27-1", name:"Puolustusvoimien toimintamenot", desc:"Puolustusvoimien henkilöstö, koulutus ja päivittäinen toiminta.", amount:2600 },
+    { id:"27-1", name:"Puolustusvoimien toimintamenot", desc:"Puolustusvoimien henkilöstö, koulutus ja päivittäinen toiminta.", amount:2500 },
     { id:"27-2", name:"Puolustusmateriaalihankinnat", desc:"Asejärjestelmien ja muun sotamateriaalin hankinnat.", amount:1500 },
-    { id:"27-3", name:"Monitoimihävittäjähankinta (HX)", desc:"Uusien Hornetit korvaavien monitoimihävittäjien hankintaohjelma.", amount:1400 },
-    { id:"27-4", name:"Ukraina-tuki ja kriisinhallinta", desc:"Ukrainan tukeminen sekä osallistuminen kansainväliseen kriisinhallintaan.", amount:250 },
-    { id:"27-5", name:"Muut puolustusmenot", desc:"Muut puolustushallinnon menot.", amount:550 }
+    { id:"27-3", name:"Monitoimihävittäjähankinta (HX)", desc:"Uusien Hornetit korvaavien monitoimihävittäjien hankintaohjelma.", amount:1400, approx:true },
+    { id:"27-4", name:"Sotilaallinen kriisinhallinta", desc:"Suomalaisten rauhanturvajoukkojen kalusto- ja hallintomenot.", amount:65 },
+    { id:"27-5", name:"Muut puolustusmenot", desc:"Puolustushallinnon muut menot, mm. arvonlisäveromenot.", amount:1062, approx:true }
   ]},
   { id:"28", name:"Valtiovarainministeriö", desc:"Valtion talous ja verotus, sekä suuret tulonsiirrot kuten hyvinvointialueiden ja kuntien rahoitus.", items:[
-    { id:"28-1", name:"Hyvinvointialueiden ja HUS:n rahoitus", desc:"Julkisen terveydenhuollon, sosiaalipalvelujen ja pelastustoimen rahoitus hyvinvointialueille.", amount:27100 },
-    { id:"28-2", name:"Valtion eläkkeet ja korvaukset", desc:"Valtion maksamat virka- ja työeläkkeet sekä niihin liittyvät korvaukset.", amount:6300 },
-    { id:"28-3", name:"Kuntien valtionosuudet ja tuki", desc:"Valtion tuki kunnille peruspalvelujen, kuten varhaiskasvatuksen, järjestämiseen.", amount:4200 },
-    { id:"28-4", name:"EU-jäsenmaksut ja kansainväliset maksuosuudet", desc:"Suomen jäsenmaksu EU:lle ja muut kansainväliset maksuosuudet.", amount:2800 },
-    { id:"28-5", name:"Ahvenanmaan maakunnalle suoritettavat maksut", desc:"Suomen perustuslain mukainen tasausmaksu Ahvenanmaan itsehallinnolle.", amount:330 },
-    { id:"28-6", name:"VM:n oma toiminta ja virastot", desc:"Valtiovarainministeriön oma toiminta sekä Verohallinto ja Tulli.", amount:1000 },
-    { id:"28-7", name:"Arvonlisäveromenot", desc:"Valtion omista hankinnoista maksettava arvonlisävero.", amount:170 }
+    { id:"28-1", name:"Hyvinvointialueiden ja HUS:n rahoitus", desc:"Julkisen terveydenhuollon, sosiaalipalvelujen ja pelastustoimen rahoitus hyvinvointialueille.", amount:26200 },
+    { id:"28-2", name:"Valtion eläkkeet ja korvaukset", desc:"Valtion maksamat virka- ja työeläkkeet sekä niihin liittyvät korvaukset.", amount:6000 },
+    { id:"28-3", name:"Kuntien valtionosuudet ja tuki", desc:"Valtion tuki kunnille peruspalvelujen, kuten varhaiskasvatuksen, järjestämiseen.", amount:3900 },
+    { id:"28-4", name:"EU-jäsenmaksut ja kansainväliset maksuosuudet", desc:"Suomen jäsenmaksu EU:lle ja muut kansainväliset maksuosuudet.", amount:2300, locked:true },
+    { id:"28-5", name:"Ahvenanmaan maakunnalle suoritettavat maksut", desc:"Suomen perustuslain mukainen tasausmaksu Ahvenanmaan itsehallinnolle.", amount:322, approx:true },
+    { id:"28-6", name:"VM:n oma toiminta ja virastot", desc:"Valtiovarainministeriön oma toiminta sekä Verohallinto ja Tulli.", amount:1318, approx:true },
+    { id:"28-7", name:"Arvonlisäveromenot", desc:"Valtion omista hankinnoista maksettava arvonlisävero.", amount:170, approx:true }
   ]},
   { id:"29", name:"Opetus- ja kulttuuriministeriö", desc:"Koulutus varhaiskasvatuksesta yliopistoihin, sekä kulttuuri, tiede ja liikunta.", items:[
-    { id:"29-1", name:"Perusopetus, varhaiskasvatus ja lukiokoulutus", desc:"Peruskoulujen, lukioiden ja varhaiskasvatuksen valtionrahoitus.", amount:3000 },
-    { id:"29-2", name:"Ammatillinen koulutus", desc:"Ammattikoulujen ja -oppilaitosten rahoitus.", amount:800 },
-    { id:"29-3", name:"Korkeakoulut (yliopistot ja ammattikorkeakoulut)", desc:"Yliopistojen ja ammattikorkeakoulujen perusrahoitus.", amount:3000 },
-    { id:"29-4", name:"Tiede ja tutkimus", desc:"Suomen Akatemian ja tutkimuslaitosten rahoitus.", amount:500 },
-    { id:"29-5", name:"Opintotuki", desc:"Opiskelijoiden opintoraha ja asumislisä.", amount:900 },
-    { id:"29-6", name:"Kulttuuri, taide ja Yleisradion rahoituksen ohjaus", desc:"Taidelaitosten, museoiden ja kulttuurihankkeiden tuki, sekä Yle-rahoituksen ohjaus.", amount:610 },
-    { id:"29-7", name:"Liikunta ja nuorisotyö", desc:"Liikuntapaikkojen ja nuorisotyön tuki.", amount:90 }
+    { id:"29-1", name:"Perusopetus, varhaiskasvatus ja lukiokoulutus", desc:"Peruskoulujen, lukioiden ja varhaiskasvatuksen valtionrahoitus.", amount:1380, approx:true },
+    { id:"29-2", name:"Ammatillinen koulutus", desc:"Ammattikoulujen ja -oppilaitosten rahoitus.", amount:900, approx:true },
+    { id:"29-3", name:"Korkeakoulut (yliopistot ja ammattikorkeakoulut)", desc:"Yliopistojen ja ammattikorkeakoulujen perusrahoitus.", amount:3000, approx:true },
+    { id:"29-4", name:"Tiede ja tutkimus", desc:"Suomen Akatemian ja tutkimuslaitosten rahoitus.", amount:972, approx:true },
+    { id:"29-5", name:"Opintotuki", desc:"Opiskelijoiden opintoraha ja asumislisä.", amount:1099 },
+    { id:"29-6", name:"Kulttuuri ja taide", desc:"Taidelaitosten, museoiden ja kulttuurihankkeiden tuki. Yleisradion rahoitus on erikseen liikenne- ja viestintäministeriön puolella.", amount:507, approx:true },
+    { id:"29-7", name:"Liikunta ja nuorisotyö", desc:"Liikuntapaikkojen ja nuorisotyön tuki.", amount:225 },
+    { id:"29-8", name:"Muut OKM:n menot", desc:"Opetus- ja kulttuuriministeriön oma hallinto ja muut pienemmät erät.", amount:369, approx:true }
   ]},
-  { id:"30", name:"Maa- ja metsätalousministeriö", desc:"Maatalous, metsät, elintarviketurvallisuus ja maaseudun kehittäminen.", items:[
-    { id:"30-1", name:"Maatalouden tuet (kansalliset ja EU)", desc:"Viljelijöille maksettava kansallinen ja EU-rahoitteinen tulotuki.", amount:1700 },
-    { id:"30-2", name:"Metsätalous ja luonnonvarat", desc:"Metsien ja luonnonvarojen hoito sekä suojelu.", amount:400 },
-    { id:"30-3", name:"Ruokavirasto ja elintarviketurvallisuus", desc:"Elintarviketurvallisuuden ja eläinten terveyden valvonta.", amount:200 },
-    { id:"30-4", name:"Maaseudun kehittäminen", desc:"Maaseudun elinkeinojen ja infrastruktuurin kehittämishankkeet.", amount:200 },
-    { id:"30-5", name:"Muut MMM:n menot", desc:"Muut maa- ja metsätalousministeriön menot.", amount:100 }
+  { id:"30", name:"Maa- ja metsätalousministeriö", desc:"Maatalous, metsät, maanmittaus ja maaseudun kehittäminen.", items:[
+    { id:"30-1", name:"Maatalouden tuet (kansalliset ja EU)", desc:"Viljelijöille maksettava kansallinen ja EU-rahoitteinen tulotuki (CAP-suunnitelma).", amount:1740 },
+    { id:"30-2", name:"Metsätalous ja luonnonvarat", desc:"Metsien, kalastuksen, riistan ja vesistöjen hoito sekä suojelu.", amount:188 },
+    { id:"30-3", name:"Maanmittaus ja asunto-osakkeiden kirjaaminen", desc:"Maaomaisuuteen ja paikkatietoihin liittyvät palvelut.", amount:53 },
+    { id:"30-4", name:"Maaseudun kehittäminen", desc:"Maaseudun elinkeinojen ja infrastruktuurin kehittämishankkeet.", amount:478 },
+    { id:"30-5", name:"Hallinto ja tutkimus", desc:"Ministeriön oma hallinto sekä Ruokaviraston ja Luonnonvarakeskuksen toimintamenot.", amount:162 }
   ]},
-  { id:"31", name:"Liikenne- ja viestintäministeriö", desc:"Tiet, radat, vesiväylät ja viestintäverkot.", items:[
-    { id:"31-1", name:"Perusväylänpito (tiet, radat, vesiväylät)", desc:"Teiden, rautateiden ja vesiväylien kunnossapito ja korjaus.", amount:2090 },
-    { id:"31-2", name:"Liikenteen ja viestinnän palvelut", desc:"Julkisen liikenteen tuki ja viestintäpalvelujen kehittäminen.", amount:912 },
-    { id:"31-3", name:"Virastojen toimintamenot", desc:"Väylävirastojen ja Traficomin toimintamenot.", amount:798 }
+  { id:"31", name:"Liikenne- ja viestintäministeriö", desc:"Tiet, radat, vesiväylät, viestintäverkot sekä Yleisradion rahoitus.", items:[
+    { id:"31-1", name:"Perusväylänpito (tiet, radat, vesiväylät)", desc:"Teiden, rautateiden ja vesiväylien kunnossapito ja korjaus.", amount:1500 },
+    { id:"31-2", name:"Väyläverkon kehittäminen", desc:"Uudet tie-, rata- ja vesiväylähankkeet.", amount:515, approx:true },
+    { id:"31-3", name:"Yleisradion rahoitus (Yle-vero)", desc:"Yleisradio Oy:n toiminta rahoitetaan valtion televisio- ja radiorahaston kautta. Rahoituksesta päättää eduskunta, joten se ei ole yhtä lukittu kuin EU-jäsenmaksu.", amount:610 },
+    { id:"31-4", name:"Liikenteen ja viestinnän palvelut", desc:"Julkisen liikenteen ostot ja tuki sekä viestintäpalvelujen kehittäminen.", amount:254, approx:true },
+    { id:"31-5", name:"Virastojen toimintamenot", desc:"Väyläviraston, Liikenne- ja viestintäviraston sekä Ilmatieteen laitoksen toimintamenot.", amount:719, approx:true }
   ]},
-  { id:"32", name:"Työ- ja elinkeinoministeriö", desc:"Työllisyys, yritystuet, energiapolitiikka ja innovaatiot.", items:[
-    { id:"32-1", name:"Energiatuki (uusi teknologia)", desc:"Tuki uuden, vähäpäästöisen energiateknologian käyttöönotolle.", amount:277 },
-    { id:"32-2", name:"Business Finland ja yritystuet", desc:"Yritysten kasvu- ja kansainvälistymistuki Business Finlandin kautta.", amount:1000 },
-    { id:"32-3", name:"Työllisyyden aktiivitoimet", desc:"Työttömien työllistymistä tukevat toimenpiteet ja koulutus.", amount:600 },
-    { id:"32-4", name:"Innovaatio- ja TKI-rahoitus", desc:"Tutkimus-, kehitys- ja innovaatiohankkeiden rahoitus.", amount:500 },
-    { id:"32-5", name:"Aluekehitys", desc:"Alueellisen elinvoiman ja yritystoiminnan tukeminen.", amount:300 },
-    { id:"32-6", name:"Muut TEM:n menot ja virastot", desc:"Muut työ- ja elinkeinoministeriön menot ja virastot.", amount:1523 }
+  { id:"32", name:"Työ- ja elinkeinoministeriö", desc:"Työllisyys, yritystuet, energiapolitiikka, innovaatiot ja kotouttaminen.", items:[
+    { id:"32-1", name:"Hallinto", desc:"Ministeriön oma toiminta ja virastot, kuten Patentti- ja rekisterihallitus, Kilpailu- ja kuluttajavirasto sekä Geologian tutkimuskeskus.", amount:738 },
+    { id:"32-2", name:"Uudistuminen ja vähähiilisyys", desc:"Suurin yksittäinen erä: sisältää mm. TKI-rahoituksen, Business Finlandin innovaatiotuet ja energiatuen uudelle energiateknologialle.", amount:1450 },
+    { id:"32-3", name:"Työllisyys ja yrittäjyys", desc:"Työttömien aktiivitoimet ja työllisyyden edistäminen.", amount:681 },
+    { id:"32-4", name:"Yritysten erityisrahoitus", desc:"Mm. Suomen Teollisuussijoitus Oy:n pääomitus ja Finnveran vientitakuut.", amount:262 },
+    { id:"32-5", name:"Kotoutuminen ja kansainvälinen osaaminen", desc:"Valtion korvaukset kunnille kotoutumisen edistämisestä sekä kansainvälisen rekrytoinnin tuki.", amount:501 }
   ]},
   { id:"33", name:"Sosiaali- ja terveysministeriö", desc:"Sosiaaliturva, eläkkeet, työttömyysturva ja terveysvakuutus.", items:[
-    { id:"33-1", name:"Kansaneläkkeet ja muut eläkemenot", desc:"Pienituloisimmille eläkeläisille maksettava vähimmäisturva.", amount:5662 },
-    { id:"33-2", name:"Perhe-etuudet, asumistuki ja toimeentulotuki", desc:"Lapsilisät, asumistuki ja viimesijainen toimeentulotuki.", amount:4321 },
-    { id:"33-3", name:"Työttömyysturva (valtion osuus)", desc:"Valtion osuus työttömien perus- ja ansioturvasta.", amount:2086 },
-    { id:"33-4", name:"Sairausvakuutus", desc:"Sairauspäivärahat ja lääkekorvaukset.", amount:1788 },
-    { id:"33-5", name:"Sote-alan tuki ja järjestöavustukset", desc:"Hyvinvointialueiden kehittämishankkeet ja järjestöjen sosiaali- ja terveysavustukset.", amount:447 },
-    { id:"33-6", name:"Muut STM:n menot", desc:"Muut sosiaali- ja terveysministeriön menot.", amount:596 }
+    { id:"33-1", name:"Kansaneläkkeet ja muut eläkemenot", desc:"Kansaneläke, takuueläke ja muut valtion kautta maksettavat eläke-etuudet.", amount:5500 },
+    { id:"33-2", name:"Perhe-etuudet, asumistuki ja toimeentulotuki", desc:"Lapsilisät, asumistuki ja viimesijainen toimeentulotuki.", amount:4600 },
+    { id:"33-3", name:"Työttömyysturva (valtion osuus)", desc:"Valtion osuus työttömien perus- ja ansioturvasta.", amount:1800 },
+    { id:"33-4", name:"Sairausvakuutus", desc:"Sairauspäivärahat ja lääkekorvaukset.", amount:1900 },
+    { id:"33-5", name:"Sote-alan tuki ja järjestöavustukset", desc:"Hyvinvointialueiden palvelurakenteen tuki ja järjestöjen sosiaali- ja terveysavustukset.", amount:358 },
+    { id:"33-6", name:"Muut STM:n menot", desc:"Mm. veteraanien tukeminen sekä ministeriön ja virastojen (Kela, THL) omat toimintamenot.", amount:1063, approx:true }
+  ]},
+  { id:"35", name:"Ympäristöministeriö", desc:"Ympäristönsuojelu, luonnonsuojelu, asuminen ja ilmastopolitiikan koordinointi.", items:[
+    { id:"35-1", name:"Luonnonsuojelu ja luonnon monimuotoisuus", desc:"Kansallispuistojen ja suojelualueiden hoito sekä uhanalaisten lajien suojelu.", amount:110, approx:true },
+    { id:"35-2", name:"Asumisen tuki ja rakennetun ympäristön ohjaus", desc:"Asumisen tukeminen ja kaavoituksen sekä rakentamisen ohjaus.", amount:60, approx:true },
+    { id:"35-3", name:"Vesien- ja ympäristönsuojelu", desc:"Vesistöjen kunnostus ja ympäristön pilaantumisen ehkäisy.", amount:45, approx:true },
+    { id:"35-4", name:"Ympäristöministeriön hallinto ja virastot", desc:"Ministeriön oma toiminta sekä Suomen ympäristökeskuksen (SYKE) toimintamenot.", amount:37, approx:true }
+  ]},
+  { id:"36", name:"Valtionvelan korot", desc:"Koron maksaminen jo otetulle valtionvelalle. Ei ole minkään ministeriön oma toiminta, vaan erillinen, kehyksen ulkopuolinen menoerä.", locked:true, items:[
+    { id:"36-1", name:"Valtionvelan korot", desc:"Korko jo otetulle valtionvelalle, ei uutta lainaa. Summaa ei voi leikata: se on lakisääteinen velvoite jo tehdyistä lainoista, ja sen suuruus riippuu korkotasosta ja velan määrästä, ei poliittisesta päätöksestä.", amount:3191, locked:true }
   ]}
 ];
 
@@ -423,9 +562,14 @@ function groupForId(id){
   if (id === "26-4" || id === "26-5") return 6;
   const m = id.split("-")[0];
   if (["25","26","27"].includes(m)) return 2;
-  if (m === "29") return (id === "29-6" || id === "29-7") ? 5 : 1;
+  if (m === "29") {
+    if (id === "29-6") return 5; // kulttuuri
+    if (id === "29-8") return 7; // hallinto
+    return 1; // koulutus, tiede, opintotuki, liikunta/nuoriso
+  }
   if (m === "30") return 4;
-  if (m === "31") return 3;
+  if (m === "35") return 4; // Ympäristöministeriö -> maaseutu ja ympäristö
+  if (m === "31") return (id === "31-3") ? 5 : 3; // Yle -> kulttuuri/media, muut -> infra
   if (m === "24") return 5;
   if (m === "28") {
     if (id === "28-1" || id === "28-2") return 0;
@@ -440,31 +584,55 @@ function groupForId(id){
 
 const PARTIES = [
   { name:"Kokoomus", icon:"🔵", vector:[25,10,-5,15,10,20,20,-15],
-    reactions:["Nyt puhutaan: veroja alas ja julkista taloutta kuntoon.","Tämä alkaa näyttää talouden tervehdyttämiseltä.","Vihdoinkin joku uskaltaa tehdä vaikeita päätöksiä."] },
+    reactions: { mild:["Suunta on oikea, jatkakaa samaan malliin.","Pieniä mutta järkeviä säästöjä.","Tästä on hyvä jatkaa kohti tasapainoa."],
+                 strong:["Nyt puhutaan: veroja alas ja julkista taloutta kuntoon.","Vihdoinkin joku uskaltaa tehdä vaikeita päätöksiä.","Tämä on juuri sitä rohkeutta, mitä Suomi tarvitsee."],
+                 extremePraise:["Vihdoinkin: {item} on nyt {verb} täysin, juuri niin kuin pitääkin.","{item} kokonaan {verb} — tarkalleen sitä, mitä olemme peräänkuuluttaneet.","Loistavaa, {item} {verb} sataprosenttisesti. Näin sitä tehdään."],
+                 extremeCriticize:["{item} kokonaan {verb}? Tämä on täysin väärä suunta meidän mielestämme.","Emme hyväksy, että {item} on {verb} sataprosenttisesti.","{item} {verb} täysin — tästä ollaan jyrkästi eri mieltä."] } },
   { name:"Perussuomalaiset", icon:"💛", vector:[10,10,-5,10,5,40,50,10],
-    reactions:["Nyt säästetään sieltä missä pitääkin.","Tältä pitäisi Suomen budjetin näyttää.","Hyvä suunta, kansan rahat kansalle."] },
+    reactions: { mild:["Oikea suunta, mutta lisää voisi vielä leikata.","Hyvä alku, jatketaan samalla linjalla.","Askel oikeaan suuntaan."],
+                 strong:["Nyt säästetään sieltä missä pitääkin.","Tältä pitäisi Suomen budjetin näyttää.","Vihdoinkin kuunnellaan tavallista kansaa."],
+                 extremePraise:["Vihdoinkin joku uskalsi: {item} on {verb} kokonaan.","{item} kokonaan {verb} — juuri tätä kansa on halunnut.","Hyvä veto: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb}? Tätä emme voi hyväksyä.","{item} {verb} sataprosenttisesti — väärä kohde väärään aikaan.","Ei näin: {item} kokonaan {verb} osuu väärään paikkaan."] } },
   { name:"SDP", icon:"❤️", vector:[-5,0,-10,5,5,5,5,0],
-    reactions:["Muistetaanhan me heikoimmassa asemassa olevat?","Hyvinvointivaltiosta ei pidä tinkiä.","Toivottavasti isotuloisimmat maksavat oman osuutensa."] },
+    reactions: { mild:["Kohtuullista, kunhan heikoimmista pidetään huolta.","Ei mikään katastrofi, mutta tarkkana kannattaa olla.","Pienet muutokset, ei suurta huolta."],
+                 strong:["Nyt ollaan menossa väärään suuntaan.","Hyvinvointivaltiosta ei pidä tinkiä näin paljon.","Tämä osuu kipeästi tavallisiin ihmisiin."],
+                 extremePraise:["Hyvä että {item} on nyt {verb} kokonaan — tästä on hyötyä tavallisille ihmisille.","{item} kokonaan {verb}, juuri niin kuin pitääkin.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb}? Tämä on jo aivan liikaa.","Emme voi hyväksyä, että {item} on {verb} sataprosenttisesti.","{item} {verb} täysin — tämä osuu ihmisiin todella kovaa."] } },
   { name:"Vasemmistoliitto", icon:"✊", vector:[-15,-5,5,-5,-10,-10,-15,5],
-    reactions:["Leikkauslinja on väärä lähtökohtaisesti.","Rahaa pitäisi olla enemmän, ei vähemmän.","Tämä osuu taas kaikkein heikoimpiin."] },
+    reactions: { mild:["Ei ihanteellista, mutta eletään.","Toivoisimme silti lisää panostuksia.","Pieni askel väärään suuntaan."],
+                 strong:["Leikkauslinja on väärä lähtökohtaisesti.","Tämä osuu taas kaikkein heikoimpiin.","Rahaa pitäisi olla enemmän, ei vähemmän."],
+                 extremePraise:["Hienoa, {item} on nyt {verb} kokonaan — tästä pidämme.","{item} kokonaan {verb}, aivan oikea suunta.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb} on suoraan sanottuna käsittämätöntä.","Ette voi vain {verb} {item} täysin ja odottaa, ettei kukaan huomaa.","{item} {verb} sataprosenttisesti — tämä on aivan väärä suunta."] } },
   { name:"Keskusta", icon:"🌳", vector:[5,5,0,-5,-15,10,10,-10],
-    reactions:["Muistakaa nyt koko Suomi, ei vain kaupungit.","Maaseutu ei saa jäädä jalkoihin.","Hyvä, kunhan maatalous ei kärsi liikaa."] },
+    reactions: { mild:["Kunhan maaseutu ei unohdu.","Ihan kohtuullista, seurataan tilannetta.","Pieniä säätöjä, ei suurta murhetta."],
+                 strong:["Muistakaa nyt koko Suomi, ei vain kaupungit.","Maaseutu ei saa jäädä jalkoihin.","Tämä ei ota huomioon maakuntia riittävästi."],
+                 extremePraise:["Hyvä, {item} on nyt {verb} kokonaan — tästä olemme tyytyväisiä.","{item} kokonaan {verb}, juuri niin kuin toivoimme.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb}? Tätä ei ole ajateltu koko Suomen kannalta.","{item} {verb} täysin — toivottavasti tämä ei jää pysyväksi.","Kokonaan {verb}: {item}. Tämä tuntuu erityisen kovalta maakunnissa."] } },
   { name:"Vihreät", icon:"🌿", vector:[0,-5,15,5,-15,-10,-15,5],
-    reactions:["Ilmastotoimista ei pidä tinkiä.","Toivottavasti koulutus ja luonto säästyvät.","Tämä ei ehkä ole kaikkein vihrein linja."] },
+    reactions: { mild:["Toivottavasti ilmastotoimet eivät kärsi tästä.","Pieniä muutoksia, tarkkana kannattaa olla.","Ei suurta huolta vielä."],
+                 strong:["Ilmastotoimista ei pidä tinkiä.","Tämä ei ole kaikkein vihrein linja.","Tulevat sukupolvet maksavat tämän."],
+                 extremePraise:["Hienoa, {item} on nyt {verb} kokonaan — juuri tätä olemme toivoneet.","{item} kokonaan {verb}, aivan oikea suunta.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb} — tämä kostautuu vielä.","{item} {verb} täysin, eikä tätä paikata enää helpolla.","Sataprosenttinen muutos kohteessa {item} on aivan liian raju."] } },
   { name:"RKP", icon:"🌊", vector:[5,-10,0,0,0,-5,-10,0],
-    reactions:["Maltillista menoa, hyvä niin.","Toivottavasti kaikki kielet ja alueet huomioidaan.","Tasapainoinen ote, kiitettävää."] },
+    reactions: { mild:["Maltillista menoa, hyvä niin.","Tasapainoinen ote toistaiseksi.","Ei suurempaa huolta."],
+                 strong:["Toivottavasti kaikki kielet ja alueet huomioidaan.","Tämä alkaa olla aika radikaalia.","Malttia peliin, olkaa hyvä."],
+                 extremePraise:["Hyvä, {item} on nyt {verb} kokonaan — tästä olemme iloisia.","{item} kokonaan {verb}, juuri niin kuin toivoimme.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb}? Tämä ei ole enää maltillista politiikkaa.","{item} {verb} täysin — toivomme tätä vielä harkittavan uudelleen.","Sataprosenttinen muutos kohteeseen {item} on meidän makuumme liian jyrkkä."] } },
   { name:"Kristillisdemokraatit", icon:"✝️", vector:[-10,5,0,5,5,15,20,5],
-    reactions:["Lapsiperheet ensin, aina.","Perusarvoista ei pidä tinkiä.","Toivottavasti perheet huomioidaan jatkossakin."] }
+    reactions: { mild:["Kunhan lapsiperheet muistetaan.","Ihan siedettävää toistaiseksi.","Pieniä muutoksia, ei suurta huolta."],
+                 strong:["Lapsiperheet ensin, aina.","Perusarvoista ei pidä tinkiä.","Tämä alkaa unohtaa perheet kokonaan."],
+                 extremePraise:["Hyvä, {item} on nyt {verb} kokonaan — tästä olemme tyytyväisiä.","{item} kokonaan {verb}, juuri niin kuin toivoimme.","Kannatettavaa: {item} {verb} täysin."],
+                 extremeCriticize:["{item} kokonaan {verb} on jo aika äärimmäistä.","{item} {verb} täysin — toivottavasti tätä on mietitty tarkkaan.","Sataprosenttinen muutos kohteessa {item} ei ole kevyt päätös."] } }
 ];
 
 const PERSONAS = [
   { icon:"👵", name:"Eläkeläinen", ids:["33-1"] },
   { icon:"🎓", name:"Opiskelija", ids:["29-5","29-3"] },
+  { icon:"👨‍🦲", name:"Leo Jussila", ids:["26-4", {id:"26-5", sign:-1}], invert:true },
   { icon:"💼", name:"Yrittäjä", ids:["32-2","32-4"] },
-  { icon:"🧔", name:"Leo Jussila", ids:["26-4"], invert:true },
-  { icon:"🎩", name:"Rikas", ids:["32-2"] },
-  { icon:"🧳", name:"Maahanmuuttaja", ids:["26-4"] },
-  { icon:"🚲", name:"Kalliohipsteri", ids:["30-2","29-6"] }
+  { icon:"🧳", name:"Maahanmuuttaja", ids:["26-4", {id:"26-5", sign:-1}, "33-2"] },
+  { icon:"🎩", name:"Rikas", ids:["32-2", {id:"33-2", sign:-1}] },
+  { icon:"🚲", name:"Kalliohipsteri", ids:["30-2","29-6","24-1","29-4","26-4","31-3"] }
 ];
 
 const flatIndex = {};
@@ -472,11 +640,11 @@ budget.forEach(cat => cat.items.forEach(item => { flatIndex[item.id] = { ...item
 
 const state = {}; // id -> pct
 let lastChangedId = null;
-const changeLog = []; // { id, name, catName, pct, time }
 Object.keys(flatIndex).forEach(id => state[id] = 0);
 
 let view = { level: 0, catId: null };
 let expandedId = null;
+const visitedMinistries = new Set();
 
 function fmt(n){ return Math.round(n).toLocaleString("fi-FI"); }
 
@@ -498,17 +666,6 @@ function updateSummary(){
   document.getElementById("sum-bar").style.width = pct + "%";
   document.getElementById("sum-goaltext").textContent = pct + " % vuoden 2025 alijäämästä (" + fmt(SAVINGS_TARGET) + " milj. €)";
   updatePartyMatch();
-  checkCelebration(rawPct);
-}
-
-let celebrationActive = false;
-function checkCelebration(rawPct){
-  if (rawPct >= 100 && !celebrationActive){
-    celebrationActive = true;
-    showCelebration();
-  } else if (rawPct < 100){
-    celebrationActive = false;
-  }
 }
 
 function computeGrade(){
@@ -518,12 +675,16 @@ function computeGrade(){
     groupWeights[item.group].weightTotal += item.amount;
   });
   const vec = groupWeights.map(g => g.weightTotal ? g.weightedSum / g.weightTotal : 0);
-  const range = Math.max(...vec) - Math.min(...vec);
+  const maxVal = Math.max(...vec), minVal = Math.min(...vec);
+  const range = maxVal - minVal;
+  const worstIdx = vec.indexOf(maxVal); // ryhmä johon kohdistui suhteessa eniten leikkausta
+  const worstName = GROUPS[worstIdx].name;
+
   if (range < 10) return { grade:"A", text:"Poikkeuksellisen tasapainoinen leikkaaja" };
   if (range < 20) return { grade:"B", text:"Melko tasapainoinen leikkaaja" };
-  if (range < 35) return { grade:"C", text:"Joku sektori sai kärsiä muita enemmän" };
-  if (range < 55) return { grade:"D", text:"Selvästi yksipuolinen leikkauslinja" };
-  return { grade:"F", text:"Yksi sektori kantoi käytännössä koko taakan" };
+  if (range < 35) return { grade:"C", text:"Eniten yksipuolinen kohta: " + worstName };
+  if (range < 55) return { grade:"D", text:"Selvästi yksipuolinen leikkauslinja — pahiten kärsi: " + worstName };
+  return { grade:"F", text:worstName + " kantoi käytännössä koko taakan" };
 }
 
 function showCelebration(){
@@ -571,37 +732,64 @@ function showCelebration(){
 
 let lastAnnouncedParty = null;
 
-function updatePartyMatch(){
-  const hasAnyChoice = Object.values(state).some(v => v !== 0);
-  const el = document.getElementById("partymatch");
-  if (!hasAnyChoice){
-    el.textContent = "Lähimpänä valintojasi: —";
-    lastAnnouncedParty = null;
-    renderPersonas();
-    return;
-  }
-
+function computeBestParty(){
   const groupWeights = GROUPS.map(() => ({ weightedSum:0, weightTotal:0 }));
   Object.values(flatIndex).forEach(item => {
     groupWeights[item.group].weightedSum += state[item.id] * item.amount;
     groupWeights[item.group].weightTotal += item.amount;
   });
   const userVector = groupWeights.map(g => g.weightTotal ? g.weightedSum / g.weightTotal : 0);
-
   let best = null, bestDist = Infinity;
   PARTIES.forEach(party => {
     let dist = 0;
     party.vector.forEach((v,i) => { dist += Math.pow(userVector[i]-v, 2); });
     if (dist < bestDist){ bestDist = dist; best = party; }
   });
-  el.textContent = "Lähimpänä valintojasi: " + best.icon + " " + best.name;
+  return best;
+}
 
-  if (best.name !== lastAnnouncedParty){
-    lastAnnouncedParty = best.name;
-    const line = best.reactions[Math.floor(Math.random()*best.reactions.length)];
-    addChatMsg(best.icon + " " + best.name + ": \u201d" + line + "\u201d", "party");
+function updatePartyMatch(){
+  const hasAnyChoice = Object.values(state).some(v => v !== 0);
+  const el = document.getElementById("partymatch");
+  if (!hasAnyChoice){
+    el.textContent = "Lähimpänä valintojasi: —";
+    renderPersonas();
+    return;
   }
+
+  const best = computeBestParty();
+  el.textContent = "Lähimpänä valintojasi: " + best.icon + " " + best.name;
   renderPersonas();
+}
+
+function announcePartyReaction(){
+  const hasAnyChoice = Object.values(state).some(v => v !== 0);
+  if (!hasAnyChoice){ lastAnnouncedParty = null; return; }
+
+  const best = computeBestParty();
+  if (best.name === lastAnnouncedParty) return;
+  lastAnnouncedParty = best.name;
+
+  // Etsi täsmällisin mahdollinen ääriesimerkki: kokonaan leikattu (100 %) tai maksimissa lisätty (-50 %) kohde.
+  const extremeItem = Object.values(flatIndex).find(i => state[i.id] === 100 || state[i.id] === -50);
+
+  let line;
+  if (extremeItem){
+    const isCut = state[extremeItem.id] === 100;
+    const verb = isCut ? "kokonaan leikattu" : "lisätty maksimiin";
+    const partyWantsCutHere = best.vector[extremeItem.group] >= 0; // puolueen oma linja tälle ryhmälle
+    const aligns = isCut === partyWantsCutHere; // täsmääkö tehty muutos puolueen omaan suuntaan
+    const pool = aligns ? best.reactions.extremePraise : best.reactions.extremeCriticize;
+    const template = pool[Math.floor(Math.random()*pool.length)];
+    line = template.replace("{item}", extremeItem.name).replace(/\{verb\}/g, verb);
+  } else {
+    const touchedPcts = Object.values(state).filter(v => v !== 0).map(v => Math.abs(v));
+    const avgMagnitude = touchedPcts.length ? touchedPcts.reduce((a,b)=>a+b,0) / touchedPcts.length : 0;
+    const tier = avgMagnitude >= 20 ? "strong" : "mild";
+    const pool = best.reactions[tier];
+    line = pool[Math.floor(Math.random()*pool.length)];
+  }
+  addChatMsg(best.icon + " " + best.name + ": \u201d" + line + "\u201d", "party");
 }
 
 function moodFor(pct){
@@ -630,12 +818,17 @@ const MOOD_COLORS = {
   "😡": "#fad2ce"
 };
 
+function normalizePersonaIds(ids){
+  return ids.map(e => typeof e === "string" ? { id:e, sign:1 } : { id:e.id, sign:e.sign || 1 });
+}
+
 function renderPersonas(){
   const row = document.getElementById("personarow");
   row.innerHTML = PERSONAS.map(p => {
-    const avgPct = p.ids.reduce((s,id)=>s+state[id],0) / p.ids.length;
+    const entries = normalizePersonaIds(p.ids);
+    const avgPct = entries.reduce((s,e)=>s+state[e.id]*e.sign,0) / entries.length;
     const face = p.invert ? moodForInverted(avgPct) : moodFor(avgPct);
-    const itemNames = p.ids.map(id => flatIndex[id] ? flatIndex[id].name : id).join(", ");
+    const itemNames = entries.map(e => flatIndex[e.id] ? flatIndex[e.id].name : e.id).join(", ");
     const changed = personaLastFace[p.name] !== undefined && personaLastFace[p.name] !== face;
     personaLastFace[p.name] = face;
     const bg = MOOD_COLORS[face] || "#eee";
@@ -672,12 +865,16 @@ function renderChart(){
 
   let items, getColor, onClick;
   if (view.level === 0){
-    items = budget.map(c => ({ id:c.id, name:c.name, value:c.total, color:c.color, hasCut:c.items.some(i=>state[i.id]!==0) }));
-    onClick = (id) => { view = { level:1, catId:id }; expandedId = null; renderAll(); };
+    items = budget.map(c => {
+      const netChange = c.items.reduce((s,i) => s + i.amount * state[i.id] / 100, 0);
+      const aggPct = c.total ? (netChange / c.total) * 100 : 0;
+      return { id:c.id, name:c.name, value:c.total, color:c.color, hasCut:c.items.some(i=>state[i.id]!==0), pct: aggPct, locked: !!c.locked };
+    });
+    onClick = (id) => { view = { level:1, catId:id }; expandedId = null; visitedMinistries.add(id); hideOnboardingHint(); renderAll(); };
     note.textContent = "Klikkaa pääluokkaa nähdäksesi sen menokohteet.";
   } else {
     const cat = budget.find(c => c.id === view.catId);
-    items = cat.items.map(i => ({ id:i.id, name:i.name, value: Math.max(currentAmount(i), i.amount*0.02), color: cat.color, hasCut: state[i.id]!==0, pct: state[i.id] }));
+    items = cat.items.map(i => ({ id:i.id, name:i.name, value: Math.max(currentAmount(i), i.amount*0.02), color: cat.color, hasCut: state[i.id]!==0, pct: state[i.id], locked: !!i.locked, approx: !!i.approx }));
     onClick = (id) => { expandedId = (expandedId === id) ? null : id; renderChart(); };
     note.textContent = "Klikkaa menokohdetta avataksesi säädöt suoraan sen alle, tai kirjoita muutos alla olevaan kenttään.";
   }
@@ -694,33 +891,43 @@ function renderChart(){
     const slice = fracs[idx] * Math.PI * 2;
     const path = document.createElementNS("http://www.w3.org/2000/svg","path");
     path.setAttribute("d", describeDonutArc(100,100,95,58, angle, angle+slice));
-    path.setAttribute("fill", view.level===0 ? it.color : shade(it.color, idx));
+    path.setAttribute("fill", it.locked ? "#c9c6ba" : (view.level===0 ? it.color : shade(it.color, idx)));
     const isFlashing = lastChangedId && (it.id === lastChangedId || (view.level===0 && flatIndex[lastChangedId] && flatIndex[lastChangedId].catId === it.id));
-    path.setAttribute("class", "pieslice" + (it.hasCut ? " cut" : "") + (isFlashing ? " flash" : ""));
+    path.setAttribute("class", "pieslice" + (it.hasCut ? " cut" : "") + (isFlashing ? " flash" : "") + (it.locked ? " locked" : ""));
     path.setAttribute("data-id", it.id);
-    path.addEventListener("click", () => onClick(it.id));
+    path.addEventListener("click", () => { if (!it.locked) onClick(it.id); });
     path.addEventListener("mouseenter", () => setHover(it.id, true));
     path.addEventListener("mouseleave", () => setHover(it.id, false));
     svg.appendChild(path);
     angle += slice;
 
     const row = document.createElement("div");
-    row.className = "legend-row";
+    row.className = "legend-row" + (view.level === 1 && it.id === expandedId ? " expanded" : "") + (it.locked ? " locked" : "");
     row.setAttribute("data-id", it.id);
-    const shareText = view.level===0 ? ` · ${(it.value/GRAND_TOTAL*100).toFixed(1)} % koko budjetista` : "";
     const amountText = view.level===0
-      ? fmt(it.value) + " milj. €" + shareText
-      : fmt(currentAmount(flatIndex[it.id])) + " milj. €" + (it.pct !== 0 ? ` (alkup. ${fmt(flatIndex[it.id].amount)})` : "");
+      ? fmt(it.value) + " milj. €"
+      : fmt(currentAmount(flatIndex[it.id])) + " milj. €";
     row.innerHTML = `
-      <span class="legend-swatch" style="background:${view.level===0 ? it.color : shade(it.color, idx)}"></span>
-      <span class="legend-name">${it.name}</span>
-      <span class="legend-amount">${amountText}</span>
-      ${it.hasCut ? `<span class="legend-tag${it.pct<0?' increase':''}">${it.pct<0?'+':'-'}${Math.abs(it.pct)}%</span>` : ''}
+      <span class="legend-swatch" style="background:${it.locked ? '#c9c6ba' : (view.level===0 ? it.color : shade(it.color, idx))}"></span>
+      <span class="legend-text">
+        <span class="legend-name">${it.name}</span>
+        <span class="legend-amount">${amountText}</span>
+      </span>
+      ${it.locked ? '' : (it.hasCut ? `<span class="legend-tag${it.pct<0?' increase':''}">${it.pct<0?'+':'-'}${Math.round(Math.abs(it.pct))}%</span>${view.level===1 ? `<button type="button" class="undobtn" data-undo="${it.id}" title="Peruuta">↺</button>` : ''}` : '')}
     `;
-    row.addEventListener("click", () => onClick(it.id));
+    row.addEventListener("click", () => { if (!it.locked) onClick(it.id); });
     row.addEventListener("mouseenter", () => setHover(it.id, true));
     row.addEventListener("mouseleave", () => setHover(it.id, false));
     legend.appendChild(row);
+
+    const undoBtn = row.querySelector(".undobtn");
+    if (undoBtn){
+      undoBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setPct(it.id, 0);
+        renderAll();
+      });
+    }
 
     if (view.level === 1 && it.id === expandedId){
       const wrapper = document.createElement("div");
@@ -731,8 +938,16 @@ function renderChart(){
     }
   });
 
+  if (view.level === 1){
+    const cat = budget.find(c=>c.id===view.catId);
+    const sharePct = ((cat.total / GRAND_TOTAL) * 100).toFixed(1);
+    document.getElementById("chart-title").innerHTML = `${cat.name}<span class="chart-title-share">${sharePct} % koko budjetista</span>`;
+  } else {
+    document.getElementById("chart-title").textContent = "";
+  }
+
   const centerTotal = items.reduce((s,i) => s + (view.level===0 ? i.value : currentAmount(flatIndex[i.id])), 0);
-  const centerLabel = view.level === 0 ? "Koko budjetti" : budget.find(c=>c.id===view.catId).name;
+  const centerLabel = view.level === 0 ? "Koko budjetti" : "";
   const centerText1 = document.createElementNS("http://www.w3.org/2000/svg","text");
   centerText1.setAttribute("x","100"); centerText1.setAttribute("y","95");
   centerText1.setAttribute("text-anchor","middle");
@@ -743,15 +958,10 @@ function renderChart(){
   centerText2.setAttribute("x","100"); centerText2.setAttribute("y","112");
   centerText2.setAttribute("text-anchor","middle");
   centerText2.setAttribute("class","donut-sub");
-  centerText2.textContent = "milj. € · " + centerLabel;
+  centerText2.textContent = centerLabel ? ("milj. € · " + centerLabel) : "milj. €";
   svg.appendChild(centerText2);
 
-  document.getElementById("breadcrumb").innerHTML = view.level === 0
-    ? "Koko valtion budjetti"
-    : `<button type="button" class="backbtn" id="bc-back">← Takaisin koko budjettiin</button><span class="breadcrumb-current">${budget.find(c=>c.id===view.catId).name}</span>`;
-  if (view.level !== 0) {
-    document.getElementById("bc-back").addEventListener("click", () => { view = { level:0, catId:null }; document.getElementById("detailslot").innerHTML=""; renderAll(); });
-  }
+  document.getElementById("chart-backbtn").classList.toggle("visible", view.level !== 0);
   const descEl = document.getElementById("ministrydesc");
   descEl.innerHTML = view.level === 1
     ? `ℹ️ ${budget.find(c=>c.id===view.catId).desc}`
@@ -770,86 +980,151 @@ function shade(hex, idx){
 function buildInlinePanelHTML(id){
   const item = flatIndex[id];
   const pct = state[id];
-  const presets = [
-    { label:"Pidä ennallaan", pct:0 },
-    { label:"Leikkaa 5%", pct:5 },
-    { label:"Leikkaa 15%", pct:15 },
-    { label:"Leikkaa 30%", pct:30 },
-    { label:"Lisää 10%", pct:-10 }
-  ];
+
+  if (item.locked){
+    return `
+      <div class="inlinepanel locked" data-panel-for="${id}">
+        <div class="inlinepanel-desc">ℹ️ ${item.desc}</div>
+        <div class="lockednotice">Tätä kohdetta ei voi muuttaa.</div>
+      </div>
+    `;
+  }
+
+  const readoutClass = pct === 0 ? "neutral" : (pct > 0 ? "cut" : "increase");
+  const readoutText = pct === 0 ? "Ei muutosta" : (pct > 0 ? "-" + pct + "%" : "+" + Math.abs(pct) + "%");
+  const euroText = fmt(Math.abs(item.amount * pct / 100)) + " milj. €";
+
   return `
     <div class="inlinepanel" data-panel-for="${id}">
       <div class="inlinepanel-desc">ℹ️ ${item.desc}</div>
-      <div class="presetrow">
-        ${presets.map(p=>{
-          const signClass = p.pct === 0 ? 'neutral' : (p.pct > 0 ? 'cutbtn' : 'increasebtn');
-          return `<button type="button" class="presetbtn ${signClass}${Math.abs(pct-p.pct)<0.01?' active':''}" data-pct="${p.pct}">${p.label}</button>`;
-        }).join("")}
+      <div class="sliderreadout ${readoutClass}">
+        <span class="sliderreadout-pct">${readoutText}</span>
+        <span class="sliderreadout-eur">${pct === 0 ? "" : euroText}</span>
       </div>
       <div class="sliderrow">
-        <input type="range" class="inline-slider" min="-100" max="50" step="1" value="${-pct}">
-        <span class="sliderval">${pct}% · ${fmt(Math.abs(item.amount*pct/100))} milj. €</span>
+        <div class="sliderzeromark"></div>
+        <input type="range" class="inline-slider" min="-100" max="100" step="1" value="${pctToS(pct)}" list="ticks-${id}">
+        <datalist id="ticks-${id}">
+          <option value="-100"></option>
+          <option value="-50"></option>
+          <option value="0"></option>
+          <option value="50"></option>
+          <option value="100"></option>
+        </datalist>
       </div>
-      <div class="sliderlabels"><span>← Leikkaa</span><span>Lisää →</span></div>
+      <div class="sliderlabels sliderlabels-5">
+        <span>-100%</span><span>-50%</span><span>0</span><span>+25%</span><span>+50%</span>
+      </div>
+      ${pct !== 0 ? `<button type="button" class="resetlink" data-reset="${id}">Nollaa</button>` : ""}
     </div>
   `;
 }
 
 function bindInlinePanel(panelEl, id){
   const item = flatIndex[id];
+  if (item.locked) return;
   panelEl.addEventListener("click", (e) => e.stopPropagation());
 
-  panelEl.querySelectorAll(".presetbtn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const p = Number(btn.dataset.pct);
-      setPct(id, p);
+  function refreshReadout(v){
+    const readout = panelEl.querySelector(".sliderreadout");
+    readout.className = "sliderreadout " + (v === 0 ? "neutral" : (v > 0 ? "cut" : "increase"));
+    panelEl.querySelector(".sliderreadout-pct").textContent = v === 0 ? "Ei muutosta" : (v > 0 ? "-" + v + "%" : "+" + Math.abs(v) + "%");
+    panelEl.querySelector(".sliderreadout-eur").textContent = v === 0 ? "" : fmt(Math.abs(item.amount * v / 100)) + " milj. €";
+    let resetBtn = panelEl.querySelector(".resetlink");
+    if (v !== 0 && !resetBtn){
+      resetBtn = document.createElement("button");
+      resetBtn.type = "button"; resetBtn.className = "resetlink"; resetBtn.dataset.reset = id; resetBtn.textContent = "Nollaa";
+      panelEl.appendChild(resetBtn);
+      bindResetLink(resetBtn);
+    } else if (v === 0 && resetBtn){
+      resetBtn.remove();
+    }
+  }
+
+  function bindResetLink(btn){
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setPct(id, 0);
+      panelEl.querySelector(".inline-slider").value = 0;
+      refreshReadout(0);
+      updateSummary();
       lastChangedId = id;
-      logChange(id);
-      renderAll();
+      renderChart();
+      announcePartyReaction();
     });
-  });
+  }
+  const initialReset = panelEl.querySelector(".resetlink");
+  if (initialReset) bindResetLink(initialReset);
 
   const slider = panelEl.querySelector(".inline-slider");
   slider.addEventListener("input", (e) => {
-    const v = -Number(e.target.value);
-    setPct(id, v);
-    panelEl.querySelector(".sliderval").textContent = v + "% · " + fmt(Math.abs(item.amount*v/100)) + " milj. €";
-    panelEl.querySelectorAll(".presetbtn").forEach(b => b.classList.toggle("active", Math.abs(v-Number(b.dataset.pct))<0.01));
+    const s = Number(e.target.value);
+    setPct(id, sToPct(s));
+    refreshReadout(state[id]);
     updateSummary();
   });
-  slider.addEventListener("change", () => {
+  slider.addEventListener("change", (e) => {
+    e.target.value = pctToS(state[id]); // napsauta kahva täsmälleen pyöristettyyn 5 %:n kohtaan
     lastChangedId = id;
-    logChange(id);
     renderChart();
+    announcePartyReaction();
   });
 }
 
 function focusItem(id){
   view = { level:1, catId: flatIndex[id].catId };
   expandedId = id;
+  visitedMinistries.add(view.catId);
   document.getElementById("detailslot").innerHTML = "";
   renderAll();
 }
 
 function setPct(id, pct){
-  state[id] = Math.max(-50, Math.min(100, pct));
+  if (flatIndex[id] && flatIndex[id].locked) return;
+  const rounded = Math.round(pct / 5) * 5;
+  state[id] = Math.max(-50, Math.min(100, rounded));
 }
 
-function logChange(id){
-  const item = flatIndex[id];
-  if (!item) return;
-  changeLog.push({ id, name: item.name, catName: item.catName, pct: state[id], time: new Date() });
+// Liukusäätimen asento S on aina symmetrinen -100..100, joten nolla on aina radan keskellä.
+// S<=0 vastaa leikkausta 0..100 %, S>0 vastaa lisäystä 0..50 % — epäsymmetrinen arvoalue,
+// mutta visuaalisesti tasapainoinen kahva.
+function pctToS(pct){
+  return pct >= 0 ? -pct : -pct * 2;
+}
+function sToPct(s){
+  return s <= 0 ? -s : -(s / 2);
+}
+
+function hideOnboardingHint(){
+  const hint = document.getElementById("onboardhint");
+  if (hint) hint.remove();
+}
+
+function updateCoverage(){
+  const total = budget.filter(c => !c.locked).length;
+  document.getElementById("coverage").textContent = visitedMinistries.size + "/" + total + " ministeriötä käyty läpi";
 }
 
 function renderAll(){
   renderChart();
   updateSummary();
+  updateCoverage();
   if (lastChangedId) setTimeout(() => { lastChangedId = null; }, 900);
 }
+
+document.getElementById("chart-backbtn").addEventListener("click", () => {
+  view = { level:0, catId:null };
+  document.getElementById("detailslot").innerHTML = "";
+  renderAll();
+});
 
 document.getElementById("resetall").addEventListener("click", () => {
   Object.keys(state).forEach(id => state[id] = 0);
   document.getElementById("detailslot").innerHTML = "";
+  chatHistory = [];
+  lastAnnouncedParty = null;
+  const log = document.getElementById("chatlog");
+  if (log) log.innerHTML = "";
   renderAll();
 });
 
@@ -864,6 +1139,27 @@ function addChatMsg(text, cls){
   log.scrollTop = log.scrollHeight;
 }
 
+let chatHistory = []; // { role: "user"|"assistant", content: string }
+
+function buildFullInstructions(text){
+  const itemList = Object.values(flatIndex).map(i => `${i.id}|${i.catName} > ${i.name}|${i.amount} milj €`).join("\n");
+  return `Tässä on Suomen valtion budjetin menokohteet muodossa id|nimi|alkuperäinen määrä:
+${itemList}
+
+Käyttäjä kirjoitti tämän toiveen budjettileikkauksesta tai -lisäyksestä: "${text}"
+
+Tunnista, mihin yllä olevista kohteista (id) toive kohdistuu parhaiten. Jos toive mainitsee prosenttiluvun, käytä sitä. Jos toive mainitsee euromäärän, laske vastaava prosentti kyseisen kohteen alkuperäisestä määrästä. Jos toive on lisäys, käytä negatiivista prosenttia. Rajaa prosentti välille -50 (suurin sallittu lisäys) ja 100 (kokonaan pois leikkaaminen), ja pyöristä aina lähimpään 5:een. Jos mikään kohde ei sovi mitenkään, palauta tyhjä actions-lista ja kerro reply-kentässä lyhyesti miksi, sekä ehdota 1-2 lähintä kohdetta budjetista jotka voisivat olla lähellä käyttäjän tarkoittamaa.
+
+Kohde 28-4 (EU-jäsenmaksut ja kansainväliset maksuosuudet) ja kohde 36-1 (Valtionvelan korot) ovat lukittuja eikä niitä voi muuttaa: Suomi ei voi yksipuolisesti päättää EU-jäsenmaksustaan, ja valtionvelan korot ovat lakisääteinen velvoite jo otetulle velalle. Jos käyttäjä pyytää leikkaamaan tai lisäämään jompaakumpaa näistä, älä sisällytä sitä actions-listaan, vaan selitä reply-kentässä lyhyesti miksi se ei ole mahdollista.
+
+Tämä on jatkuva keskustelu: jos käyttäjä myöhemmin tarkentaa tai viittaa aiempaan viestiin (esim. "entä vielä enemmän" tai "ja lisää samaan"), käytä aiempaa keskusteluhistoriaa kontekstina.
+
+ERIKOISTAPAUS – puolueet: jos käyttäjä pyytää jonkin suomalaisen eduskuntapuolueen (kokoomus, perussuomalaiset, sdp, vasemmistoliitto, keskusta, vihreät, rkp, kristillisdemokraatit) "tyylistä" tai "mukaista" budjettia, älä yritä olla neutraali – sovella sen sijaan tarkoituksella liioiteltua, satiirista karikatyyriä usealle kohteelle kerralla (actions-listaan monta id/pct-paria). Esimerkki tyylistä: "kokoomuslainen" budjetti = kasvata yritystuet sallittuun maksimiin eli 50 % lisäys (id 32-2, pct -50), leikkaa rajusti pienituloisiin kohdistuvista menoista (esim. 33-2 perhe-etuudet/asumistuki/toimeentulotuki n. 45 %, 33-3 työttömyysturva n. 40 %, 33-1 eläkkeet n. 20 %), älä koske maahanmuuttoon (26-4 ja 26-5 pct 0), ja lisää puolustusmenoja hieman (27-sarjan kohteet n. -5 %). Keksi vastaavalla logiikalla yhtä liioiteltu karikatyyri MYÖS muille mainituille puolueille niiden yleisesti tunnetun maineen pohjalta (esim. persut = rajut leikkaukset kehitysapuun ja maahanmuuttoon, eläkkeisiin ei kosketa; sdp = hyvinvointia ei leikata lainkaan, korkomenotkin unohdetaan mieluummin; vasemmistoliitto = lisätään rahaa lähes kaikkialle; keskusta = maataloutta suojellaan täysin, leikataan muualta; vihreät = ympäristö ja koulutus koskemattomia, puolustuksesta ja maataloudesta leikataan; rkp = maahanmuuttoon ei kosketa (pct 0), varhaiskasvatukseen (29-1) reilu lisäys n. -15 ("pakkoruotsi jo päiväkotiin"), hyvinvointialueiden rahoitukseen (28-1) pieni lisäys n. -3 ("uusi yliopistollinen sairaala Pietarsaareen viimeinkin"), kehitysyhteistyöhön (24-1) mukava korotus n. -10, ja toimeentulotukikohteesta (33-2) nipistetään symbolisesti n. 5 %; kristillisdemokraatit = lapsiperheiden tuet koskemattomia). Sovella satiiria TASAPUOLISESTI kaikkiin puolueisiin riippumatta siitä mikä puolue mainitaan – älä ole yhtä puoluetta kohtaan ilkeämpi kuin toista. Kirjoita reply-kenttään lyhyt, humoristinen ja ilkikurinen selitys siitä mitä teit, samaan tyyliin kuin tavallinenkin selitys – älä erikseen mainitse sanaa "satiiri" tai selittele että kyse ei ole puolueen oikeasta ohjelmasta.
+
+Vastaa VAIN JSON-muodossa, ei mitään muuta tekstiä, ei markdown-koodilohkoa:
+{"actions":[{"id":"<id>","pct":<numero>}],"reply":"<3 lauseen suomenkielinen selitys tavallisella puhekielellä, joka kertoo mistä kohteesta/kohteista on kyse ja mitä sille tehtiin (esim. leikattiin reilusti / lisättiin vähän), sekä mielellään yhden konkreettisen luvun (joko prosentti tai euromäärä, ei molempia). Vältä sanaa 'momentti' ja muuta budjettijargonia, kirjoita niin että kuka tahansa ymmärtää.>"}`;
+}
+
 async function handleChatSend(){
   const input = document.getElementById("chatinput");
   const btn = document.getElementById("chatsend");
@@ -873,47 +1169,41 @@ async function handleChatSend(){
   input.value = "";
   btn.disabled = true;
 
-  const itemList = Object.values(flatIndex).map(i => `${i.id}|${i.catName} > ${i.name}|${i.amount} milj €`).join("\n");
-  const prompt = `Tässä on Suomen valtion budjetin menokohteet muodossa id|nimi|alkuperäinen määrä:
-${itemList}
-
-Käyttäjä kirjoitti tämän toiveen budjettileikkauksesta tai -lisäyksestä: "${text}"
-
-Tunnista, mihin yllä olevista kohteista (id) toive kohdistuu parhaiten. Jos toive mainitsee prosenttiluvun, käytä sitä. Jos toive mainitsee euromäärän, laske vastaava prosentti kyseisen kohteen alkuperäisestä määrästä. Jos toive on lisäys, käytä negatiivista prosenttia. Rajaa prosentti välille -50 (suurin sallittu lisäys) ja 100 (kokonaan pois leikkaaminen). Jos mikään kohde ei sovi mitenkään, palauta tyhjä actions-lista ja kerro reply-kentässä lyhyesti miksi, sekä ehdota 1-2 lähintä kohdetta budjetista jotka voisivat olla lähellä käyttäjän tarkoittamaa.
-
-ERIKOISTAPAUS – puolueet: jos käyttäjä pyytää jonkin suomalaisen eduskuntapuolueen (kokoomus, perussuomalaiset, sdp, vasemmistoliitto, keskusta, vihreät, rkp, kristillisdemokraatit) "tyylistä" tai "mukaista" budjettia, älä yritä olla neutraali – sovella sen sijaan tarkoituksella liioiteltua, satiirista karikatyyriä usealle kohteelle kerralla (actions-listaan monta id/pct-paria). Esimerkki tyylistä: "kokoomuslainen" budjetti = kasvata yritystuet sallittuun maksimiin eli 50 % lisäys (id 32-2, pct -50), leikkaa rajusti pienituloisiin kohdistuvista menoista (esim. 33-2 perhe-etuudet/asumistuki/toimeentulotuki n. 45 %, 33-3 työttömyysturva n. 40 %, 33-1 eläkkeet n. 20 %), älä koske maahanmuuttoon (26-4 ja 26-5 pct 0), ja lisää puolustusmenoja hieman (27-sarjan kohteet n. -5 %). Keksi vastaavalla logiikalla yhtä liioiteltu karikatyyri MYÖS muille mainituille puolueille niiden yleisesti tunnetun maineen pohjalta (esim. persut = rajut leikkaukset kehitysapuun ja maahanmuuttoon, eläkkeisiin ei kosketa; sdp = hyvinvointia ei leikata lainkaan, korkomenotkin unohdetaan mieluummin; vasemmistoliitto = lisätään rahaa lähes kaikkialle; keskusta = maataloutta suojellaan täysin, leikataan muualta; vihreät = ympäristö ja koulutus koskemattomia, puolustuksesta ja maataloudesta leikataan; rkp = maahanmuuttoon ei kosketa (pct 0), varhaiskasvatukseen (29-1) reilu lisäys n. -15 ("pakkoruotsi jo päiväkotiin"), hyvinvointialueiden rahoitukseen (28-1) pieni lisäys n. -3 ("uusi yliopistollinen sairaala Pietarsaareen viimeinkin"), kehitysyhteistyöhön (24-1) mukava korotus n. -10, ja toimeentulotukikohteesta (33-2) nipistetään symbolisesti n. 5 %; kristillisdemokraatit = lapsiperheiden tuet koskemattomia). Sovella satiiria TASAPUOLISESTI kaikkiin puolueisiin riippumatta siitä mikä puolue mainitaan – älä ole yhtä puoluetta kohtaan ilkeämpi kuin toista. Kirjoita reply-kenttään lyhyt, humoristinen ja ilkikurinen selitys siitä mitä teit, samaan tyyliin kuin tavallinenkin selitys – älä erikseen mainitse sanaa "satiiri" tai selittele että kyse ei ole puolueen oikeasta ohjelmasta.
-
-Vastaa VAIN JSON-muodossa, ei mitään muuta tekstiä, ei markdown-koodilohkoa:
-{"actions":[{"id":"<id>","pct":<numero>}],"reply":"<3 lauseen suomenkielinen selitys tavallisella puhekielellä, joka kertoo mistä kohteesta/kohteista on kyse ja mitä sille tehtiin (esim. leikattiin reilusti / lisättiin vähän), sekä mielellään yhden konkreettisen luvun (joko prosentti tai euromäärä, ei molempia). Vältä sanaa 'momentti' ja muuta budjettijargonia, kirjoita niin että kuka tahansa ymmärtää.>"}`;
+  const isFirstMessage = chatHistory.length === 0;
+  const messageContent = isFirstMessage ? buildFullInstructions(text) : text;
+  chatHistory.push({ role: "user", content: messageContent });
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch(API_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
         max_tokens: 1000,
-        messages: [{ role: "user", content: prompt }]
+        messages: chatHistory
       })
     });
     const data = await response.json();
     let raw = data.content.map(b => b.text || "").join("").trim();
     raw = raw.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(raw);
+    chatHistory.push({ role: "assistant", content: raw });
 
     if (!parsed.actions || parsed.actions.length === 0){
       addChatMsg(parsed.reply || "En löytänyt budjetista mitään, mikä vastaisi tätä toivetta.", "assistant");
     } else {
       parsed.actions.forEach(a => {
-        if (flatIndex[a.id]){ setPct(a.id, Number(a.pct)); logChange(a.id); }
+        if (flatIndex[a.id]){ setPct(a.id, Number(a.pct)); }
       });
       if (parsed.actions[0]) { lastChangedId = parsed.actions[0].id; }
       const firstMatch = flatIndex[parsed.actions[0].id];
       if (firstMatch) { view = { level: 1, catId: firstMatch.catId }; expandedId = firstMatch.id; }
       renderAll();
+      announcePartyReaction();
       addChatMsg(parsed.reply || "Tein muutoksen.", "assistant");
     }
   } catch (err) {
+    chatHistory.pop(); // peru juuri lisätty käyttäjäviesti, ettei historia jää epätahtiin
     addChatMsg("Yhteys tekoälyyn epäonnistui tai vastausta ei voitu tulkita. Kokeile hetken päästä uudelleen tai muotoile toive toisin.", "error");
   } finally {
     btn.disabled = false;
@@ -924,6 +1214,12 @@ document.getElementById("chatsend").addEventListener("click", handleChatSend);
 document.getElementById("chatinput").addEventListener("keydown", (e) => { if (e.key === "Enter") handleChatSend(); });
 
 // --- Jaettavan linkin lataus ---
+function decodeShareCode(input){
+  const match = input.match(/[?&]s=([^&\s]+)/);
+  const code = match ? match[1] : input.trim();
+  return JSON.parse(decodeURIComponent(escape(atob(code))));
+}
+
 (function loadFromUrl(){
   try {
     const params = new URLSearchParams(window.location.search);
@@ -931,35 +1227,11 @@ document.getElementById("chatinput").addEventListener("keydown", (e) => { if (e.
     if (!s) return;
     const decoded = JSON.parse(decodeURIComponent(escape(atob(s))));
     Object.entries(decoded).forEach(([id, pct]) => { if (flatIndex[id]) setPct(id, pct); });
+    if (Object.keys(decoded).length) hideOnboardingHint();
   } catch(e) { /* virheellinen tai puuttuva jaettu tila, jatketaan tyhjällä */ }
 })();
 
 renderAll();
-
-// --- Haku ---
-document.getElementById("searchbox").addEventListener("input", (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  const box = document.getElementById("searchresults");
-  if (!q){ box.innerHTML = ""; return; }
-  const matches = Object.values(flatIndex).filter(i => i.name.toLowerCase().includes(q) || i.catName.toLowerCase().includes(q)).slice(0, 8);
-  if (matches.length === 0){ box.innerHTML = `<div class="legend-note">Ei osumia.</div>`; return; }
-  box.innerHTML = matches.map(i => `
-    <div class="legend-row" data-jump="${i.id}">
-      <span class="legend-swatch" style="background:${budget.find(c=>c.id===i.catId).color}"></span>
-      <span class="legend-name">${i.name}</span>
-      <span class="legend-amount">${i.catName} · ${fmt(currentAmount(i))} milj. €</span>
-      ${state[i.id]!==0 ? `<span class="legend-tag${state[i.id]<0?' increase':''}">${state[i.id]<0?'+':'-'}${Math.abs(state[i.id])}%</span>` : ''}
-    </div>
-  `).join("");
-  box.querySelectorAll("[data-jump]").forEach(row => {
-    row.addEventListener("click", () => {
-      const id = row.dataset.jump;
-      document.getElementById("searchbox").value = "";
-      box.innerHTML = "";
-      focusItem(id);
-    });
-  });
-});
 
 // --- Kaikki muutokset yhdellä sivulla ---
 document.getElementById("showall-btn").addEventListener("click", () => {
@@ -975,19 +1247,41 @@ document.getElementById("showall-btn").addEventListener("click", () => {
         <div class="detail-title">Kaikki muutokset (${changed.length})</div>
         <button type="button" class="closebtn" id="detail-close">✕</button>
       </div>
-      <div class="legend" style="margin-top:6px;">
+      ${changed.length > 6 ? `<input type="text" id="changesearch" class="changesearch" placeholder="🔍 Suodata nimellä...">` : ''}
+      <div class="legend" id="changelist" style="margin-top:6px;">
         ${changed.map(i => `
-          <div class="legend-row" data-jump="${i.id}">
+          <div class="legend-row" data-jump="${i.id}" data-name="${i.name.toLowerCase()}">
             <span class="legend-swatch" style="background:${budget.find(c=>c.id===i.catId).color}"></span>
-            <span class="legend-name">${i.name}</span>
-            <span class="legend-amount">${i.catName} · ${fmt(currentAmount(i))} milj. €</span>
+            <span class="legend-text">
+              <span class="legend-name">${i.name}</span>
+              <span class="legend-amount">${i.catName} · ${fmt(currentAmount(i))} milj. €</span>
+            </span>
             <span class="legend-tag${state[i.id]<0?' increase':''}">${state[i.id]<0?'+':'-'}${Math.abs(state[i.id])}%</span>
+            <button type="button" class="undobtn" data-undo="${i.id}" title="Peruuta">↺</button>
           </div>
         `).join("")}
       </div>
     </div>
   `;
+  const changesearch = slot.querySelector("#changesearch");
+  if (changesearch){
+    changesearch.addEventListener("input", (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      slot.querySelectorAll("#changelist .legend-row").forEach(row => {
+        row.style.display = row.dataset.name.includes(q) ? "" : "none";
+      });
+    });
+  }
   slot.querySelector("#detail-close").addEventListener("click", () => { slot.innerHTML = ""; });
+  slot.querySelectorAll(".undobtn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setPct(btn.dataset.undo, 0);
+      renderChart();
+      updateSummary();
+      document.getElementById("showall-btn").click();
+    });
+  });
   slot.querySelectorAll("[data-jump]").forEach(row => {
     row.addEventListener("click", () => {
       focusItem(row.dataset.jump);
@@ -995,33 +1289,55 @@ document.getElementById("showall-btn").addEventListener("click", () => {
   });
 });
 
-document.getElementById("history-btn").addEventListener("click", () => {
-  const slot = document.getElementById("detailslot");
-  if (changeLog.length === 0){
-    slot.innerHTML = `<div class="detailcard"><div class="detail-title">Ei vielä historiaa</div><div class="detail-sub">Tee ensin joku muutos.</div></div>`;
+document.getElementById("compare-btn").addEventListener("click", () => {
+  const input = prompt("Liitä toisen henkilön jakama linkki tai koodi:");
+  if (!input) return;
+
+  let otherState;
+  try {
+    otherState = decodeShareCode(input);
+  } catch(e){
+    alert("Linkkiä ei voitu lukea. Tarkista, että kopioit koko linkin.");
     return;
   }
-  const rows = changeLog.slice().reverse().map((entry, i) => {
-    const n = changeLog.length - i;
-    const sign = entry.pct < 0 ? "+" : "-";
-    return `
-      <div class="opt">
-        <p class="opt-desc"><b>${n}.</b> ${entry.catName} → ${entry.name}</p>
-        <div class="opt-amount${entry.pct<0?' increase':''}">${sign}${Math.abs(entry.pct)} %</div>
+
+  const myTotal = runningTotal();
+  let otherTotal = 0;
+  Object.entries(otherState).forEach(([id, pct]) => { if (flatIndex[id]) otherTotal += flatIndex[id].amount * pct / 100; });
+
+  const allIds = new Set([...Object.keys(state).filter(id => state[id] !== 0), ...Object.keys(otherState)]);
+  const rows = Array.from(allIds).filter(id => flatIndex[id]).map(id => ({
+    id, name: flatIndex[id].name, catName: flatIndex[id].catName,
+    mine: state[id] || 0, theirs: otherState[id] || 0
+  })).sort((a,b) => Math.abs(b.mine - b.theirs) - Math.abs(a.mine - a.theirs));
+
+  const overlay = document.createElement("div");
+  overlay.className = "summarypage-overlay";
+  overlay.innerHTML = `
+    <div class="summarypage">
+      <button type="button" class="summarypage-close" id="cmp-close">✕</button>
+      <h2>Vertailu</h2>
+      <div class="cmp-totals">
+        <div class="cmp-total"><div class="cmp-total-label">Sinä</div><div class="cmp-total-val${myTotal<0?' negative':''}">${myTotal<0?'-':''}${fmt(Math.abs(myTotal))} milj. €</div></div>
+        <div class="cmp-total"><div class="cmp-total-label">Toinen</div><div class="cmp-total-val${otherTotal<0?' negative':''}">${otherTotal<0?'-':''}${fmt(Math.abs(otherTotal))} milj. €</div></div>
       </div>
-    `;
-  }).join("");
-  slot.innerHTML = `
-    <div class="detailcard">
-      <div class="detail-head">
-        <div class="detail-title">Muutosloki (${changeLog.length})</div>
-        <button type="button" class="closebtn" id="detail-close">✕</button>
+      <div class="sp-section-title">Eroavat kohteet</div>
+      <div class="sp-changelist">
+        ${rows.length === 0 ? '<div class="legend-note">Ei eroja tai muutoksia kummallakaan.</div>' : rows.map(r => `
+          <div class="cmp-row">
+            <div class="cmp-row-name">${r.name}</div>
+            <div class="cmp-row-vals">
+              <span class="cmp-val mine">Sinä: ${r.mine>0?'-':(r.mine<0?'+':'')}${Math.abs(r.mine)}%</span>
+              <span class="cmp-val theirs">Toinen: ${r.theirs>0?'-':(r.theirs<0?'+':'')}${Math.abs(r.theirs)}%</span>
+            </div>
+          </div>
+        `).join("")}
       </div>
-      <div class="detail-sub">Uusin ylhäällä.</div>
-      ${rows}
     </div>
   `;
-  slot.querySelector("#detail-close").addEventListener("click", () => { slot.innerHTML = ""; });
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector("#cmp-close").addEventListener("click", () => overlay.remove());
+  document.body.appendChild(overlay);
 });
 
 document.getElementById("share-btn").addEventListener("click", () => {
@@ -1037,6 +1353,109 @@ document.getElementById("share-btn").addEventListener("click", () => {
   } else {
     prompt("Kopioi linkki:", url);
   }
+});
+
+function generateTimeline(total){
+  const groupWeights = GROUPS.map(() => ({ weightedSum:0, weightTotal:0 }));
+  Object.values(flatIndex).forEach(item => {
+    groupWeights[item.group].weightedSum += state[item.id] * item.amount;
+    groupWeights[item.group].weightTotal += item.amount;
+  });
+  const vec = groupWeights.map(g => g.weightTotal ? g.weightedSum / g.weightTotal : 0);
+  const maxVal = Math.max(...vec), minVal = Math.min(...vec);
+  const dominant = Math.abs(maxVal) >= Math.abs(minVal) ? GROUPS[vec.indexOf(maxVal)].name : GROUPS[vec.indexOf(minVal)].name;
+
+  const isSaving = total > 0;
+  const narratives = isSaving ? [
+    `Säästöt näkyvät heti valtion tilinpäätöksessä, mutta ${dominant} tuntee muutoksen jo arjessa.`,
+    `Alijäämä pienenee edelleen, ja pidemmän aikavälin vaikutukset ${dominant.toLowerCase()}-alueella alkavat näkyä laajemmin.`,
+    `Säästöjen kertymä on jo merkittävä, mutta osaajia tai palveluita on voinut siirtyä muualle.`,
+    `Julkinen talous on vahvempi, mutta hintana voi olla pysyvä muutos ${dominant.toLowerCase()}-alueen tasossa.`
+  ] : [
+    `Lisämenot kasvattavat alijäämää heti ensimmäisenä vuonna.`,
+    `Velka kasvaa edelleen, mutta ${dominant.toLowerCase()}-alueen tilanne paranee.`,
+    `Velanhoitokulut alkavat näkyä muualla budjetissa, kun korkomenot kasvavat.`,
+    `Velkasuhde on selvästi korkeampi, mutta ${dominant.toLowerCase()}-alue on vahvistunut pitkäjänteisesti.`
+  ];
+
+  return [1,2,3,4].map(y => ({
+    year: y,
+    cumulative: total * y,
+    text: narratives[y-1]
+  }));
+}
+
+document.getElementById("done-btn").addEventListener("click", () => {
+  const total = runningTotal();
+  const rawPct = (total / SAVINGS_TARGET) * 100;
+
+  if (rawPct >= 100){
+    showCelebration();
+    return;
+  }
+
+  const targetPct = Math.max(0, Math.min(100, Math.round(rawPct)));
+  const grade = computeGrade();
+  const hasAnyChoice = Object.values(state).some(v => v !== 0);
+  const best = hasAnyChoice ? computeBestParty() : null;
+  const changed = Object.values(flatIndex).filter(i => state[i.id] !== 0)
+    .sort((a,b) => Math.abs(b.amount*state[b.id]) - Math.abs(a.amount*state[a.id]));
+
+  const overlay = document.createElement("div");
+  overlay.className = "summarypage-overlay";
+  overlay.innerHTML = `
+    <div class="summarypage">
+      <button type="button" class="summarypage-close" id="sp-close">✕</button>
+      <h2>Yhteenveto</h2>
+      <div class="sp-total${total<0?' negative':''}">${total<0?'-':''}${fmt(Math.abs(total))} milj. €</div>
+      <div class="barwrap"><div class="bar" style="width:${targetPct}%"></div></div>
+      <div class="barhint">${targetPct} % vuoden 2025 alijäämän (12 200 milj. €) kattamisesta</div>
+
+      <div class="sp-gradebox">
+        <div class="sp-gradeletter">${hasAnyChoice ? grade.grade : '–'}</div>
+        <div class="sp-gradetext">${hasAnyChoice ? grade.text : 'Et ole vielä tehnyt yhtään muutosta.'}</div>
+      </div>
+
+      ${hasAnyChoice ? `
+        <div class="sp-section-title">Lähimpänä valintojasi</div>
+        <div class="sp-party">${best.icon} ${best.name}</div>
+        <div class="sp-partydesc">${best.desc}</div>
+      ` : ''}
+
+      ${hasAnyChoice ? `
+        <div class="sp-section-title">Suunta seuraavat 4 vuotta (yksinkertaistettu arvio)</div>
+        <div class="legend-note" style="margin-bottom:8px;">Karkea, suoraviivainen malli — ei huomioi korkoja, talouskasvua tai muita todellisia muuttujia.</div>
+        <div class="sp-timeline">
+          ${generateTimeline(total).map(t => `
+            <div class="tl-row">
+              <div class="tl-year">Vuosi ${t.year}</div>
+              <div class="tl-body">
+                <div class="tl-amount${t.cumulative<0?' negative':''}">${t.cumulative<0?'-':''}${fmt(Math.abs(t.cumulative))} milj. € yhteensä</div>
+                <div class="tl-text">${t.text}</div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      ` : ''}
+
+      <div class="sp-section-title">Muutokset (${changed.length}), suurimmasta pienimpään</div>
+      <div class="sp-changelist">
+        ${changed.length === 0 ? '<div class="legend-note">Ei vielä muutoksia.</div>' : changed.map(i => `
+          <div class="legend-row">
+            <span class="legend-swatch" style="background:${budget.find(c=>c.id===i.catId).color}"></span>
+            <span class="legend-text">
+              <span class="legend-name">${i.name}</span>
+              <span class="legend-amount">${i.catName} · ${fmt(currentAmount(i))} milj. €</span>
+            </span>
+            <span class="legend-tag${state[i.id]<0?' increase':''}">${state[i.id]<0?'+':'-'}${Math.abs(state[i.id])}%</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+  overlay.querySelector("#sp-close").addEventListener("click", () => overlay.remove());
+  document.body.appendChild(overlay);
 });
 </script>
 </body>
