@@ -77,6 +77,13 @@
   }
   .toolsrow button:hover { background: var(--accent-bg); }
   .toolsrow button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @media (min-width: 1080px) {
+    .toolsrow {
+      position: fixed; top: 140px; left: calc(50vw + 340px);
+      flex-direction: column; align-items: stretch; width: 190px; gap: 10px; z-index: 20;
+    }
+    .toolsrow button { width: 100%; text-align: center; padding: 12px 14px; box-shadow: 0 4px 12px rgba(0,53,128,0.10); }
+  }
   .donebtn {
     background: linear-gradient(90deg, #003580, #4d8fd1) !important; color: #fff !important;
     border: none !important; font-weight: 700;
@@ -383,7 +390,7 @@
     <div class="personarow" id="personarow"></div>
   </div>
 
-  <div class="toolsrow">
+  <div class="toolsrow" id="toolsrow">
     <button id="showall-btn" type="button">Kaikki muutokset</button>
     <button id="share-btn" type="button">Jaa tuloksesi</button>
     <button id="compare-btn" type="button">🔀 Vertaile leikkauksia</button>
@@ -789,7 +796,7 @@ function announcePartyReaction(){
     const pool = best.reactions[tier];
     line = pool[Math.floor(Math.random()*pool.length)];
   }
-  addChatMsg(best.icon + " " + best.name + ": \u201d" + line + "\u201d", "party");
+  addChatMsg(best.icon + " " + best.name + ": \u201d" + line + "\u201d", "party", extremeItem ? extremeItem.id : null);
 }
 
 function moodFor(pct){
@@ -925,6 +932,7 @@ function renderChart(){
       undoBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         setPct(it.id, 0);
+        removeChatMessagesForItem(it.id);
         renderAll();
       });
     }
@@ -1045,6 +1053,7 @@ function bindInlinePanel(panelEl, id){
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       setPct(id, 0);
+      removeChatMessagesForItem(id);
       panelEl.querySelector(".inline-slider").value = 0;
       refreshReadout(0);
       updateSummary();
@@ -1065,6 +1074,7 @@ function bindInlinePanel(panelEl, id){
   });
   slider.addEventListener("change", (e) => {
     e.target.value = pctToS(state[id]); // napsauta kahva täsmälleen pyöristettyyn 5 %:n kohtaan
+    if (state[id] === 0) removeChatMessagesForItem(id);
     lastChangedId = id;
     renderChart();
     announcePartyReaction();
@@ -1130,13 +1140,18 @@ document.getElementById("resetall").addEventListener("click", () => {
 
 // --- Free-text interpretation via Claude ---
 
-function addChatMsg(text, cls){
+function addChatMsg(text, cls, itemId){
   const log = document.getElementById("chatlog");
   const div = document.createElement("div");
   div.className = "chatmsg " + cls;
   div.textContent = text;
+  if (itemId) div.dataset.itemId = itemId;
   log.appendChild(div);
   log.scrollTop = log.scrollHeight;
+}
+
+function removeChatMessagesForItem(id){
+  document.querySelectorAll('.chatmsg[data-item-id="' + CSS.escape(id) + '"]').forEach(el => el.remove());
 }
 
 let chatHistory = []; // { role: "user"|"assistant", content: string }
@@ -1200,7 +1215,7 @@ async function handleChatSend(){
       if (firstMatch) { view = { level: 1, catId: firstMatch.catId }; expandedId = firstMatch.id; }
       renderAll();
       announcePartyReaction();
-      addChatMsg(parsed.reply || "Tein muutoksen.", "assistant");
+      addChatMsg(parsed.reply || "Tein muutoksen.", "assistant", parsed.actions[0] ? parsed.actions[0].id : null);
     }
   } catch (err) {
     chatHistory.pop(); // peru juuri lisätty käyttäjäviesti, ettei historia jää epätahtiin
@@ -1277,6 +1292,7 @@ document.getElementById("showall-btn").addEventListener("click", () => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       setPct(btn.dataset.undo, 0);
+      removeChatMessagesForItem(btn.dataset.undo);
       renderChart();
       updateSummary();
       document.getElementById("showall-btn").click();
